@@ -13,7 +13,7 @@ API_URL = "https://datacenter.eastmoney.com/api/data/v1/get"
 REPORT_NAME = "RPT_NEEQ_ISSUEINFO_LIST"
 START_DATE = "2025-08-01"
 EXCEL_PATH = "/Users/jianjiandandan/Documents/AI学习/北交所新股情况.xlsx"
-HTML_PATH = "/Users/jianjiandandan/Documents/AI学习/北交所打新分析报告.html"
+HTML_PATH = "/Users/jianjiandandan/Documents/AI学习/index.html"
 HEADERS = {"User-Agent": "Mozilla/5.0", "Referer": "https://data.eastmoney.com/xg/xg/"}
 
 def fetch_all():
