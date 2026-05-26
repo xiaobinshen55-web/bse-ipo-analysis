@@ -1,0 +1,1606 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>北交所打新投资策略分析报告</title>
+<style>
+:root{--primary:#1a5276;--primary-light:#2980b9;--accent:#e74c3c;--accent-light:#f39c12;--green:#27ae60;--bg:#f0f3f6;--card:#fff;--text:#2c3e50;--text-light:#7f8c8d;--border:#e1e8ed;--shadow:0 2px 12px rgba(0,0,0,.08);--radius:12px}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.7}
+.hero{background:linear-gradient(135deg,#1a3c4a 0%,#1a5276 40%,#2471a3 100%);color:#fff;padding:80px 0 60px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-50%;left:-25%;width:150%;height:200%;background:radial-gradient(ellipse at 30% 50%,rgba(255,255,255,.06) 0%,transparent 60%),radial-gradient(ellipse at 70% 30%,rgba(255,255,255,.04) 0%,transparent 50%)}
+.hero h1{font-size:2.6em;font-weight:700;letter-spacing:2px;position:relative;margin-bottom:12px}
+.hero .subtitle{font-size:1.15em;opacity:.85;position:relative;font-weight:300}
+.hero .date-badge{display:inline-block;margin-top:20px;padding:6px 24px;border:1px solid rgba(255,255,255,.35);border-radius:20px;font-size:.9em;position:relative;letter-spacing:1px}
+.container{max-width:1200px;margin:0 auto;padding:0 24px}
+.section{margin:50px 0}
+.section-title{font-size:1.6em;font-weight:700;color:var(--primary);margin-bottom:8px;display:flex;align-items:center;gap:10px}
+.section-title .icon{width:36px;height:36px;background:linear-gradient(135deg,var(--primary-light),var(--primary));border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.1em}
+.section-desc{color:var(--text-light);margin-bottom:28px;font-size:.95em}
+.card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:28px;margin-bottom:24px}
+.card h3{font-size:1.1em;color:var(--primary);margin-bottom:16px;padding-bottom:10px;border-bottom:2px solid var(--border)}
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:24px}
+.stat-card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:24px;text-align:center;transition:transform .2s;border-top:4px solid transparent}
+.stat-card:hover{transform:translateY(-2px)}
+.stat-card.green{border-top-color:var(--green)}
+.stat-card.accent{border-top-color:var(--accent)}
+.stat-card.blue{border-top-color:var(--primary-light)}
+.stat-card.orange{border-top-color:var(--accent-light)}
+.stat-card .value{font-size:2em;font-weight:800;line-height:1.2}
+.stat-card .label{font-size:.85em;color:var(--text-light);margin-top:6px}
+.stat-card .sub{font-size:.8em;color:var(--green);margin-top:4px}
+.chart-wrap{width:100%;overflow-x:auto}
+.chart-wrap svg{display:block;margin:0 auto}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+@media(max-width:768px){.two-col{grid-template-columns:1fr}}
+table{width:100%;border-collapse:collapse;font-size:.88em}
+thead th{background:#f8f9fa;padding:12px 10px;text-align:right;font-weight:600;color:var(--primary);border-bottom:2px solid var(--border);white-space:nowrap}
+thead th:first-child,thead th:nth-child(2){text-align:left}
+tbody td{padding:10px;text-align:right;border-bottom:1px solid var(--border)}
+tbody td:first-child{font-family:monospace;color:var(--text-light);text-align:left}
+tbody td:nth-child(2){text-align:left;font-weight:500}
+tbody tr:hover{background:#f8fafc}
+.gain-up{color:var(--green);font-weight:600}
+.rule-flow{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;margin:24px 0}
+.rule-step{flex:1;min-width:170px;max-width:220px;background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:24px 18px;text-align:center}
+.rule-step .step-num{width:40px;height:40px;background:linear-gradient(135deg,var(--primary-light),var(--primary));border-radius:50%;color:#fff;font-weight:700;font-size:1.2em;display:flex;align-items:center;justify-content:center;margin:0 auto 12px}
+.rule-step h4{font-size:1em;margin-bottom:6px;color:var(--primary)}
+.rule-step p{font-size:.82em;color:var(--text-light);line-height:1.5}
+.adv-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin:24px 0}
+@media(max-width:768px){.adv-grid{grid-template-columns:1fr}}
+.adv-card{border-radius:var(--radius);padding:28px}
+.adv-card.pro{background:linear-gradient(135deg,#e8f8f5,#d5f5e3);border:1px solid #a3e4bc}
+.adv-card.con{background:linear-gradient(135deg,#fef9e7,#fdebd0);border:1px solid #f9e79f}
+.adv-card h4{font-size:1.15em;margin-bottom:16px}
+.adv-card.pro h4{color:#1e8449}
+.adv-card.con h4{color:#b9770e}
+.adv-card ul{list-style:none;padding:0}
+.adv-card li{padding:6px 0;font-size:.9em;display:flex;align-items:flex-start;gap:8px}
+.adv-card li::before{content:'';flex-shrink:0;width:6px;height:6px;border-radius:50%;margin-top:7px}
+.adv-card.pro li::before{background:var(--green)}
+.adv-card.con li::before{background:var(--accent-light)}
+.strategy-banner{background:linear-gradient(135deg,#1a5276,#2471a3);color:#fff;border-radius:var(--radius);padding:32px 36px;margin:28px 0}
+.strategy-banner h3{color:#fff;font-size:1.3em;margin-bottom:12px}
+.strategy-banner p{opacity:.9;font-size:.95em;margin-bottom:6px}
+.footer{text-align:center;padding:40px 0;color:var(--text-light);font-size:.82em;border-top:1px solid var(--border);margin-top:60px}
+.footer .disclaimer{margin-top:12px;font-size:.78em;opacity:.7}
+.table-scroll{overflow-x:auto}
+.table-scroll::-webkit-scrollbar{height:6px}
+.table-scroll::-webkit-scrollbar-thumb{background:#ccc;border-radius:3px}
+#loading-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(255,255,255,.85);display:flex;align-items:center;justify-content:center;z-index:999;flex-direction:column}
+#loading-overlay.done{display:none}
+.spinner{width:50px;height:50px;border:4px solid #e0e0e0;border-top-color:var(--primary-light);border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+#loading-msg{margin-top:16px;color:var(--text-light);font-size:.95em}
+#data-status{display:inline-block;padding:3px 12px;border-radius:10px;font-size:.75em;margin-left:8px;font-weight:500}
+#data-status.live{background:#e8f8f5;color:#1e8449}
+#data-status.cached{background:#fef9e7;color:#b9770e}
+#data-status.error{background:#fde8e8;color:#c0392b}
+</style>
+</head>
+<body>
+
+<div id="loading-overlay">
+  <div class="spinner"></div>
+  <div id="loading-msg">正在从东方财富获取最新数据...</div>
+</div>
+
+<div class="hero">
+  <h1>北交所打新投资策略分析报告</h1>
+  <div class="subtitle">低风险套利机会深度研究 —— 数据驱动，理性决策 <span id="data-status">加载中...</span></div>
+  <div class="date-badge" id="hero-date-range">统计区间：加载中...</div>
+</div>
+
+<div class="container">
+
+<div class="section" id="sec-rules">
+  <div class="section-title"><span class="icon">&#9432;</span> 一、什么是北交所打新？</div>
+  <div class="section-desc">北交所（北京证券交易所）新股申购机制与其他板块不同，理解规则是参与的前提。</div>
+  <div class="rule-flow">
+    <div class="rule-step"><div class="step-num">1</div><h4>开通权限</h4><p>证券账户资产日均不低于50万元，具备2年以上证券交易经验</p></div>
+    <div class="rule-step"><div class="step-num">2</div><h4>现金申购</h4><p>全额缴付申购资金，申购日冻结，T+2或T+3解冻</p></div>
+    <div class="rule-step"><div class="step-num">3</div><h4>比例配售</h4><p>当申购总量＞发行量时，按比例配售；申购资金越大，获配越多</p></div>
+    <div class="rule-step"><div class="step-num">4</div><h4>上市交易</h4><p>中签后约1-2周上市，首日无涨跌幅限制，T+1交易</p></div>
+  </div>
+  <div class="card"><h3>核心规则要点</h3>
+    <table><thead><tr><th style="text-align:left">项目</th><th style="text-align:left">规则说明</th></tr></thead><tbody>
+      <tr><td>申购方式</td><td>全额现金预缴，按比例配售（不同于沪深市值配售）</td></tr>
+      <tr><td>资金占用</td><td>申购日冻结，通常T+2/T+3解冻</td></tr>
+      <tr><td>中签机制</td><td>无摇号，纯按资金量比例分配，大资金优势明显</td></tr>
+      <tr><td>定价机制</td><td>直接定价发行，发行市盈率受窗口指导，普遍低于行业均值</td></tr>
+      <tr><td>首日交易</td><td>无涨跌幅限制，波动较大，但统计期内零破发</td></tr>
+    </tbody></table>
+  </div>
+</div>
+
+<div class="section" id="sec-overview">
+  <div class="section-title"><span class="icon">&#9733;</span> 二、核心数据概览</div>
+  <div class="section-desc" id="overview-desc">加载中...</div>
+  <div class="stat-grid" id="stat-grid"></div>
+</div>
+
+<div class="section" id="sec-gain">
+  <div class="section-title"><span class="icon">&#9733;</span> 三、收益深度分析</div>
+  <div class="section-desc">首日涨幅分布、每百股获利排名、以及上市后长期持有表现。</div>
+  <div class="two-col">
+    <div class="card"><h3>首日涨幅分布</h3><div class="chart-wrap" id="chart-gain-dist"></div></div>
+    <div class="card"><h3>发行价格分布</h3><div class="chart-wrap" id="chart-price-dist"></div></div>
+  </div>
+  <div class="card"><h3>首日收益TOP 10（按每百股获利排序）</h3><div class="table-scroll"><table><thead><tr><th style="text-align:left">排名</th><th style="text-align:left">股票名称</th><th>发行价(元)</th><th>发行PE</th><th>首日均价(元)</th><th>首日涨幅</th><th>百股获利(元)</th><th>年化收益</th></tr></thead><tbody id="tbody-top-gainers"></tbody></table></div></div>
+  <div class="card"><h3>长期持有收益TOP 8（最新价 vs 发行价累计涨幅）</h3><div class="chart-wrap" id="chart-cum-gain"></div></div>
+</div>
+
+<div class="section" id="sec-monthly">
+  <div class="section-title"><span class="icon">&#9783;</span> 四、月度趋势与市场热度</div>
+  <div class="section-desc">追踪发行节奏、资金热度、首日收益的变化趋势。</div>
+  <div class="two-col">
+    <div class="card"><h3>月度发行数量与冻结资金</h3><div class="chart-wrap" id="chart-monthly-ipo"></div></div>
+    <div class="card"><h3>首日平均涨幅及百股获利趋势</h3><div class="chart-wrap" id="chart-monthly-gain"></div></div>
+  </div>
+  <div class="card"><h3>月度关键指标一览</h3><div class="table-scroll"><table><thead><tr><th style="text-align:left">月份</th><th>发行数</th><th>均价(元)</th><th>中签率(万分之)</th><th>冻资(亿)</th><th>首日涨幅</th><th>百股获利(元)</th></tr></thead><tbody id="tbody-monthly"></tbody></table></div></div>
+</div>
+
+<div class="section" id="sec-risk">
+  <div class="section-title"><span class="icon">&#9888;</span> 五、优劣势与风险评估</div>
+  <div class="section-desc">理性看待北交所打新，优势显著但门槛和风险也不容忽视。</div>
+  <div class="adv-grid">
+    <div class="adv-card pro"><h4>优势</h4><ul>
+      <li><strong>零破发记录：</strong>统计期内已上市新股首日全部上涨，胜率100%，下有保底</li>
+      <li><strong>发行折价显著：</strong>发行PE仅为行业PE的~40%，估值安全垫极厚</li>
+      <li><strong>收益确定性高：</strong>每百股平均获利可观，最低也有正收益</li>
+      <li><strong>资金周转快：</strong>冻结仅2-3天，年化周转50次+</li>
+      <li><strong>规则透明：</strong>纯比例配售，无摇号运气成分</li>
+      <li><strong>长期持有更优：</strong>持有至今平均累计涨幅远超首日收益</li>
+    </ul></div>
+    <div class="adv-card con"><h4>劣势与风险</h4><ul>
+      <li><strong>资金门槛高：</strong>稳获100股需大资金，小资金中签概率极低</li>
+      <li><strong>中签率极低：</strong>平均万分之3左右，资金效率不高</li>
+      <li><strong>竞争加剧：</strong>冻结资金持续走高，收益空间收窄</li>
+      <li><strong>流动性风险：</strong>北交所整体流动性弱于沪深</li>
+      <li><strong>政策风险：</strong>发行节奏、定价规则可能调整</li>
+      <li><strong>机会成本：</strong>大额资金冻结期间错过其他投资机会</li>
+    </ul></div>
+  </div>
+</div>
+
+<div class="section" id="sec-strategy">
+  <div class="section-title"><span class="icon">&#9998;</span> 六、投资策略建议</div>
+  <div class="strategy-banner"><h3>推荐策略：大资金稳健型打新套利</h3><p>适合可投资金充裕的稳健型投资者，通过持续参与北交所新股申购获取确定性收益。</p></div>
+  <div class="two-col">
+    <div class="card"><h3>操作建议</h3><table><thead><tr><th style="text-align:left">要点</th><th style="text-align:left">建议</th></tr></thead><tbody>
+      <tr><td>资金规模</td><td>以"稳获百股所需资金"为基准参与</td></tr>
+      <tr><td>卖出策略</td><td>首日开盘后择机卖出，锁定确定性收益</td></tr>
+      <tr><td>参与频率</td><td>每只都参与，机会充足</td></tr>
+      <tr><td>资金安排</td><td>预留滚动资金，避免错过连续发行窗口</td></tr>
+      <tr><td>选股偏好</td><td>低价+低PE组合安全垫更厚</td></tr>
+    </tbody></table></div>
+    <div class="card"><h3>进阶策略</h3><table><thead><tr><th style="text-align:left">策略</th><th style="text-align:left">说明</th></tr></thead><tbody>
+      <tr><td>首日+持有</td><td>优质标的上市后继续持有</td></tr>
+      <tr><td>多账户操作</td><td>家庭多账户分散申购，提高总获配量</td></tr>
+      <tr><td>资金最大化</td><td>顶格申购，最大化绝对收益</td></tr>
+      <tr><td>关注低热度标的</td><td>冷门股中签率更高，收益未必差</td></tr>
+    </tbody></table></div>
+  </div>
+</div>
+
+<div class="section" id="sec-table">
+  <div class="section-title"><span class="icon">&#9776;</span> 七、完整数据附表</div>
+  <div class="section-desc" id="table-desc">加载中...</div>
+  <div class="card"><div class="table-scroll"><table id="table-all-stocks" style="font-size:.82em"><thead><tr>
+    <th style="text-align:left">代码</th><th style="text-align:left">简称</th><th style="text-align:left">申购日</th><th>发行价</th><th>发行PE</th><th>行业PE</th><th>中签率‱</th><th>稳获百股(万)</th><th>首日涨幅</th><th>百股获利</th><th>累计涨幅</th>
+  </tr></thead><tbody id="tbody-all-stocks"></tbody></table></div></div>
+</div>
+
+<div class="footer">
+  <p id="footer-info">数据来源：东方财富数据中心 | 自动更新</p>
+  <p class="disclaimer">免责声明：本报告仅供参考，不构成投资建议。过往业绩不代表未来表现。投资有风险，入市需谨慎。</p>
+</div>
+
+</div>
+
+<!-- ===== Embedded data (offline fallback) ===== -->
+<script>
+const EMBEDDED_DATA = [
+  {
+    "code": "920206",
+    "name": "彩客科技",
+    "apply_date": "2026-05-27",
+    "price": 30.28,
+    "pe": 14.98,
+    "ind_pe": 32.47,
+    "win_rate": null,
+    "funds_needed": null,
+    "gain_pct": null,
+    "profit": null,
+    "cum_gain": null,
+    "avg_price": null,
+    "annual_return": null,
+    "fund_yi": null,
+    "people_wan": null,
+    "listing_serial": null
+  },
+  {
+    "code": "920211",
+    "name": "新睿电子",
+    "apply_date": "2026-05-25",
+    "price": 25.19,
+    "pe": 14.99,
+    "ind_pe": 57.91,
+    "win_rate": null,
+    "funds_needed": null,
+    "gain_pct": null,
+    "profit": null,
+    "cum_gain": null,
+    "avg_price": null,
+    "annual_return": null,
+    "fund_yi": null,
+    "people_wan": null,
+    "listing_serial": null
+  },
+  {
+    "code": "920218",
+    "name": "新天力",
+    "apply_date": "2026-05-20",
+    "price": 12.19,
+    "pe": 14.78,
+    "ind_pe": 30.67,
+    "win_rate": 0.0002578989,
+    "funds_needed": 472.67,
+    "gain_pct": null,
+    "profit": null,
+    "cum_gain": null,
+    "avg_price": null,
+    "annual_return": null,
+    "fund_yi": 9961.92,
+    "people_wan": 57.79,
+    "listing_serial": null
+  },
+  {
+    "code": "920161",
+    "name": "龙辰科技",
+    "apply_date": "2026-05-18",
+    "price": 9.21,
+    "pe": 14.98,
+    "ind_pe": 70.47,
+    "win_rate": 0.0002740647,
+    "funds_needed": 336.06,
+    "gain_pct": null,
+    "profit": null,
+    "cum_gain": null,
+    "avg_price": null,
+    "annual_return": null,
+    "fund_yi": 10282.74,
+    "people_wan": 52.4,
+    "listing_serial": 46169.0
+  },
+  {
+    "code": "920220",
+    "name": "朗信电气",
+    "apply_date": "2026-05-13",
+    "price": 28.29,
+    "pe": 14.99,
+    "ind_pe": 29.17,
+    "win_rate": 0.0003565682,
+    "funds_needed": 793.4,
+    "gain_pct": 5.186,
+    "profit": 14671.0,
+    "cum_gain": 2.0293,
+    "avg_price": 175.0023,
+    "annual_return": 22.4981,
+    "fund_yi": 9455.01,
+    "people_wan": 46.39,
+    "listing_serial": 46164.0
+  },
+  {
+    "code": "920096",
+    "name": "嘉晨智能",
+    "apply_date": "2026-05-06",
+    "price": 14.43,
+    "pe": 14.99,
+    "ind_pe": 43.79,
+    "win_rate": 0.0002679695,
+    "funds_needed": 538.5,
+    "gain_pct": 4.5063,
+    "profit": 6503.0,
+    "cum_gain": 3.4491,
+    "avg_price": 79.4565,
+    "annual_return": 14.6918,
+    "fund_yi": 8723.6,
+    "people_wan": 50.23,
+    "listing_serial": 46160.0
+  },
+  {
+    "code": "920178",
+    "name": "锐翔智能",
+    "apply_date": "2026-04-27",
+    "price": 29.47,
+    "pe": 14.99,
+    "ind_pe": 41.25,
+    "win_rate": 0.00037800050000000003,
+    "funds_needed": 779.63,
+    "gain_pct": 4.9885,
+    "profit": 14701.0,
+    "cum_gain": 5.5826,
+    "avg_price": 176.482,
+    "annual_return": 22.9422,
+    "fund_yi": 9645.22,
+    "people_wan": 45.78,
+    "listing_serial": 46157.0
+  },
+  {
+    "code": "920200",
+    "name": "振宏股份",
+    "apply_date": "2026-04-22",
+    "price": 20.58,
+    "pe": 14.99,
+    "ind_pe": 45.08,
+    "win_rate": 0.0004118349,
+    "funds_needed": 499.72,
+    "gain_pct": 1.6091,
+    "profit": 3312.0,
+    "cum_gain": 1.5802,
+    "avg_price": 53.6956,
+    "annual_return": 8.0626,
+    "fund_yi": 10303.62,
+    "people_wan": 54.07,
+    "listing_serial": 46149.0
+  },
+  {
+    "code": "920186",
+    "name": "中科仪",
+    "apply_date": "2026-04-20",
+    "price": 16.21,
+    "pe": 35.23,
+    "ind_pe": null,
+    "win_rate": 0.000383805,
+    "funds_needed": 422.35,
+    "gain_pct": 2.9954,
+    "profit": 4855.0,
+    "cum_gain": 4.7761,
+    "avg_price": 64.7648,
+    "annual_return": 13.9872,
+    "fund_yi": 9882.99,
+    "people_wan": 47.81,
+    "listing_serial": 46141.0
+  },
+  {
+    "code": "920156",
+    "name": "海昌智能",
+    "apply_date": "2026-04-15",
+    "price": 20.93,
+    "pe": 14.98,
+    "ind_pe": 40.8,
+    "win_rate": 0.0004396134,
+    "funds_needed": 476.11,
+    "gain_pct": 0.9286,
+    "profit": 1943.0,
+    "cum_gain": 1.8356,
+    "avg_price": 40.3649,
+    "annual_return": 4.9665,
+    "fund_yi": 10335.18,
+    "people_wan": 52.2,
+    "listing_serial": 46139.0
+  },
+  {
+    "code": "920125",
+    "name": "鸿仕达",
+    "apply_date": "2026-04-13",
+    "price": 16.57,
+    "pe": 14.99,
+    "ind_pe": 40.88,
+    "win_rate": 0.0002453994,
+    "funds_needed": 675.23,
+    "gain_pct": 1.9789,
+    "profit": 3279.0,
+    "cum_gain": 10.2251,
+    "avg_price": 49.361,
+    "annual_return": 5.9085,
+    "fund_yi": 8203.99,
+    "people_wan": 52.32,
+    "listing_serial": 46136.0
+  },
+  {
+    "code": "920191",
+    "name": "瑞尔竞达",
+    "apply_date": "2026-04-09",
+    "price": 7.71,
+    "pe": 14.99,
+    "ind_pe": 39.14,
+    "win_rate": 0.000346584,
+    "funds_needed": 222.46,
+    "gain_pct": 0.9699,
+    "profit": 748.0,
+    "cum_gain": 0.4812,
+    "avg_price": 15.1881,
+    "annual_return": 2.4539,
+    "fund_yi": 8879.37,
+    "people_wan": 46.06,
+    "listing_serial": 46132.0
+  },
+  {
+    "code": "920177",
+    "name": "恒道科技",
+    "apply_date": "2026-04-07",
+    "price": 21.8,
+    "pe": 14.99,
+    "ind_pe": 41.56,
+    "win_rate": 0.000316421,
+    "funds_needed": 688.96,
+    "gain_pct": 0.7604,
+    "profit": 1658.0,
+    "cum_gain": 0.5303,
+    "avg_price": 38.3772,
+    "annual_return": 2.9274,
+    "fund_yi": 8110.39,
+    "people_wan": 40.49,
+    "listing_serial": 46128.0
+  },
+  {
+    "code": "920012",
+    "name": "创达新材",
+    "apply_date": "2026-04-01",
+    "price": 19.58,
+    "pe": 14.99,
+    "ind_pe": 63.36,
+    "win_rate": 0.0002689035,
+    "funds_needed": 728.15,
+    "gain_pct": 1.368,
+    "profit": 2678.0,
+    "cum_gain": 2.4566,
+    "avg_price": 46.365,
+    "annual_return": 4.4755,
+    "fund_yi": 8079.76,
+    "people_wan": 48.99,
+    "listing_serial": 46125.0
+  },
+  {
+    "code": "920181",
+    "name": "赛英电子",
+    "apply_date": "2026-03-30",
+    "price": 28.0,
+    "pe": 13.79,
+    "ind_pe": 29.27,
+    "win_rate": 0.0004184558,
+    "funds_needed": 669.13,
+    "gain_pct": 1.25,
+    "profit": 3500.0,
+    "cum_gain": 2.8011,
+    "avg_price": 62.9996,
+    "annual_return": 6.3639,
+    "fund_yi": 6503.91,
+    "people_wan": 38.23,
+    "listing_serial": 46122.0
+  },
+  {
+    "code": "920011",
+    "name": "晨光电机",
+    "apply_date": "2026-03-25",
+    "price": 15.5,
+    "pe": 14.96,
+    "ind_pe": 29.28,
+    "win_rate": 0.0003215365,
+    "funds_needed": 482.07,
+    "gain_pct": 0.9136,
+    "profit": 1416.0,
+    "cum_gain": 0.7013,
+    "avg_price": 29.6613,
+    "annual_return": 3.5741,
+    "fund_yi": 8966.32,
+    "people_wan": 50.19,
+    "listing_serial": 46120.0
+  },
+  {
+    "code": "920055",
+    "name": "隆源股份",
+    "apply_date": "2026-03-23",
+    "price": 24.7,
+    "pe": 14.99,
+    "ind_pe": 29.78,
+    "win_rate": 0.000434284,
+    "funds_needed": 568.76,
+    "gain_pct": 0.5415,
+    "profit": 1338.0,
+    "cum_gain": 0.2834,
+    "avg_price": 38.0757,
+    "annual_return": 2.8613,
+    "fund_yi": 8701.91,
+    "people_wan": 38.65,
+    "listing_serial": 46112.0
+  },
+  {
+    "code": "920069",
+    "name": "普昂医疗",
+    "apply_date": "2026-03-18",
+    "price": 18.38,
+    "pe": 14.53,
+    "ind_pe": 43.57,
+    "win_rate": 0.0002529104,
+    "funds_needed": 726.74,
+    "gain_pct": 1.3037,
+    "profit": 2396.0,
+    "cum_gain": 1.0082,
+    "avg_price": 42.3417,
+    "annual_return": 4.0115,
+    "fund_yi": 6921.85,
+    "people_wan": 44.99,
+    "listing_serial": 46108.0
+  },
+  {
+    "code": "920188",
+    "name": "悦龙科技",
+    "apply_date": "2026-03-16",
+    "price": 14.04,
+    "pe": 14.99,
+    "ind_pe": 28.52,
+    "win_rate": 0.0003127999,
+    "funds_needed": 448.85,
+    "gain_pct": 1.4174,
+    "profit": 1990.0,
+    "cum_gain": 0.8625,
+    "avg_price": 33.9404,
+    "annual_return": 5.3943,
+    "fund_yi": 8884.47,
+    "people_wan": 45.99,
+    "listing_serial": 46111.0
+  },
+  {
+    "code": "920028",
+    "name": "新恒泰",
+    "apply_date": "2026-03-11",
+    "price": 9.4,
+    "pe": 14.99,
+    "ind_pe": 28.56,
+    "win_rate": 0.0003743867,
+    "funds_needed": 251.08,
+    "gain_pct": 1.2571,
+    "profit": 1182.0,
+    "cum_gain": 1.0117,
+    "avg_price": 21.217,
+    "annual_return": 5.7262,
+    "fund_yi": 9285.09,
+    "people_wan": 58.35,
+    "listing_serial": 46101.0
+  },
+  {
+    "code": "920078",
+    "name": "族兴新材",
+    "apply_date": "2026-03-09",
+    "price": 6.98,
+    "pe": 14.99,
+    "ind_pe": 34.76,
+    "win_rate": 0.00020930150000000002,
+    "funds_needed": 333.5,
+    "gain_pct": 4.1157,
+    "profit": 2873.0,
+    "cum_gain": 3.6132,
+    "avg_price": 35.7073,
+    "annual_return": 10.4802,
+    "fund_yi": 6903.25,
+    "people_wan": 50.44,
+    "listing_serial": 46099.0
+  },
+  {
+    "code": "920036",
+    "name": "觅睿科技",
+    "apply_date": "2026-02-26",
+    "price": 21.52,
+    "pe": 14.99,
+    "ind_pe": 65.47,
+    "win_rate": 0.0003185318,
+    "funds_needed": 675.6,
+    "gain_pct": 1.0273,
+    "profit": 2211.0,
+    "cum_gain": 0.9182,
+    "avg_price": 43.6265,
+    "annual_return": 2.3887,
+    "fund_yi": 8272.68,
+    "people_wan": 59.68,
+    "listing_serial": 46090.0
+  },
+  {
+    "code": "920183",
+    "name": "海菲曼",
+    "apply_date": "2026-02-24",
+    "price": 19.71,
+    "pe": 14.99,
+    "ind_pe": 65.52,
+    "win_rate": 0.0002589197,
+    "funds_needed": 761.24,
+    "gain_pct": 1.7747,
+    "profit": 3498.0,
+    "cum_gain": 0.9625,
+    "avg_price": 54.6888,
+    "annual_return": 5.5906,
+    "fund_yi": 7212.23,
+    "people_wan": 55.81,
+    "listing_serial": 46085.0
+  },
+  {
+    "code": "920187",
+    "name": "通领科技",
+    "apply_date": "2026-02-11",
+    "price": 29.62,
+    "pe": 14.47,
+    "ind_pe": 30.47,
+    "win_rate": 0.0004955969,
+    "funds_needed": 597.67,
+    "gain_pct": 0.5222,
+    "profit": 1547.0,
+    "cum_gain": 0.1371,
+    "avg_price": 45.0887,
+    "annual_return": 3.1489,
+    "fund_yi": 8391.19,
+    "people_wan": 52.38,
+    "listing_serial": 46086.0
+  },
+  {
+    "code": "920168",
+    "name": "通宝光电",
+    "apply_date": "2026-02-09",
+    "price": 16.17,
+    "pe": 14.99,
+    "ind_pe": 30.5,
+    "win_rate": 0.0003078894,
+    "funds_needed": 525.19,
+    "gain_pct": 0.8212,
+    "profit": 1328.0,
+    "cum_gain": 0.2121,
+    "avg_price": 29.4482,
+    "annual_return": 3.0761,
+    "fund_yi": 8883.07,
+    "people_wan": 60.67,
+    "listing_serial": 46079.0
+  },
+  {
+    "code": "920166",
+    "name": "海圣医疗",
+    "apply_date": "2026-02-04",
+    "price": 12.64,
+    "pe": 13.99,
+    "ind_pe": 42.95,
+    "win_rate": 0.00018735209999999998,
+    "funds_needed": 674.67,
+    "gain_pct": 1.4231,
+    "profit": 1799.0,
+    "cum_gain": 0.8394,
+    "avg_price": 30.6279,
+    "annual_return": 3.2438,
+    "fund_yi": 6857.78,
+    "people_wan": 59.94,
+    "listing_serial": 46065.0
+  },
+  {
+    "code": "920180",
+    "name": "爱得科技",
+    "apply_date": "2026-02-02",
+    "price": 7.67,
+    "pe": 14.98,
+    "ind_pe": 42.57,
+    "win_rate": 0.0002433561,
+    "funds_needed": 315.18,
+    "gain_pct": 2.0296,
+    "profit": 1557.0,
+    "cum_gain": 0.8005,
+    "avg_price": 23.2371,
+    "annual_return": 6.0093,
+    "fund_yi": 8376.65,
+    "people_wan": 49.67,
+    "listing_serial": 46063.0
+  },
+  {
+    "code": "920119",
+    "name": "美德乐",
+    "apply_date": "2026-01-21",
+    "price": 41.88,
+    "pe": 14.99,
+    "ind_pe": 47.63,
+    "win_rate": 0.0005695494000000001,
+    "funds_needed": 735.32,
+    "gain_pct": 1.8693,
+    "profit": 7829.0,
+    "cum_gain": 0.3921,
+    "avg_price": 120.1681,
+    "annual_return": 12.9536,
+    "fund_yi": 10588.58,
+    "people_wan": 59.24,
+    "listing_serial": 46052.0
+  },
+  {
+    "code": "920159",
+    "name": "农大科技",
+    "apply_date": "2026-01-19",
+    "price": 25.0,
+    "pe": 13.4,
+    "ind_pe": 30.39,
+    "win_rate": 0.0003871636,
+    "funds_needed": 645.73,
+    "gain_pct": 1.0563,
+    "profit": 2641.0,
+    "cum_gain": 0.392,
+    "avg_price": 51.4086,
+    "annual_return": 4.9758,
+    "fund_yi": 9298.39,
+    "people_wan": 54.59,
+    "listing_serial": 46050.0
+  },
+  {
+    "code": "920076",
+    "name": "国亮新材",
+    "apply_date": "2026-01-14",
+    "price": 10.76,
+    "pe": 14.97,
+    "ind_pe": 33.44,
+    "win_rate": 0.0002110267,
+    "funds_needed": 509.89,
+    "gain_pct": 1.78,
+    "profit": 1915.0,
+    "cum_gain": 0.8968,
+    "avg_price": 29.9123,
+    "annual_return": 4.57,
+    "fund_yi": 8280.77,
+    "people_wan": 72.81,
+    "listing_serial": 46044.0
+  },
+  {
+    "code": "920050",
+    "name": "爱舍伦",
+    "apply_date": "2026-01-12",
+    "price": 15.98,
+    "pe": 14.99,
+    "ind_pe": 29.79,
+    "win_rate": 0.00027686329999999996,
+    "funds_needed": 577.19,
+    "gain_pct": 2.044,
+    "profit": 3266.0,
+    "cum_gain": 0.8811,
+    "avg_price": 48.643,
+    "annual_return": 6.8851,
+    "fund_yi": 8789.21,
+    "people_wan": 69.58,
+    "listing_serial": 46043.0
+  },
+  {
+    "code": "920086",
+    "name": "科马材料",
+    "apply_date": "2026-01-06",
+    "price": 11.66,
+    "pe": 14.2,
+    "ind_pe": 28.68,
+    "win_rate": 0.0002565359,
+    "funds_needed": 454.52,
+    "gain_pct": 3.6792,
+    "profit": 4290.0,
+    "cum_gain": 1.5403,
+    "avg_price": 54.5591,
+    "annual_return": 11.4833,
+    "fund_yi": 8557.65,
+    "people_wan": 62.45,
+    "listing_serial": 46038.0
+  },
+  {
+    "code": "920045",
+    "name": "蘅东光",
+    "apply_date": "2025-12-23",
+    "price": 31.59,
+    "pe": 14.99,
+    "ind_pe": 58.05,
+    "win_rate": 0.000344406,
+    "funds_needed": 917.24,
+    "gain_pct": 9.6654,
+    "profit": 30533.0,
+    "cum_gain": 17.5249,
+    "avg_price": 336.9187,
+    "annual_return": 40.5001,
+    "fund_yi": 8461.46,
+    "people_wan": 58.88,
+    "listing_serial": 46022.0
+  },
+  {
+    "code": "920121",
+    "name": "江天科技",
+    "apply_date": "2025-12-16",
+    "price": 21.21,
+    "pe": 14.5,
+    "ind_pe": 48.66,
+    "win_rate": 0.0003246505,
+    "funds_needed": 653.32,
+    "gain_pct": 2.0992,
+    "profit": 4452.0,
+    "cum_gain": 0.6153,
+    "avg_price": 65.7335,
+    "annual_return": 8.2915,
+    "fund_yi": 7769.44,
+    "people_wan": 52.96,
+    "listing_serial": 46016.0
+  },
+  {
+    "code": "920035",
+    "name": "精创电气",
+    "apply_date": "2025-11-18",
+    "price": 12.1,
+    "pe": 13.47,
+    "ind_pe": 41.07,
+    "win_rate": 0.00021853210000000002,
+    "funds_needed": 553.7,
+    "gain_pct": 3.6467,
+    "profit": 4412.0,
+    "cum_gain": 1.2628,
+    "avg_price": 56.225,
+    "annual_return": 9.6958,
+    "fund_yi": 7205.78,
+    "people_wan": 57.2,
+    "listing_serial": 45993.0
+  },
+  {
+    "code": "920124",
+    "name": "南特科技",
+    "apply_date": "2025-11-11",
+    "price": 8.66,
+    "pe": 13.6,
+    "ind_pe": 44.33,
+    "win_rate": 0.00033403969999999997,
+    "funds_needed": 259.26,
+    "gain_pct": 2.0681,
+    "profit": 1791.0,
+    "cum_gain": 0.7806,
+    "avg_price": 26.5696,
+    "annual_return": 8.4047,
+    "fund_yi": 8675.82,
+    "people_wan": 63.7,
+    "listing_serial": 45988.0
+  },
+  {
+    "code": "920091",
+    "name": "大鹏工业",
+    "apply_date": "2025-11-05",
+    "price": 9.0,
+    "pe": 14.52,
+    "ind_pe": 38.54,
+    "win_rate": 0.00018693410000000002,
+    "funds_needed": 481.46,
+    "gain_pct": 3.8868,
+    "profit": 3498.0,
+    "cum_gain": 3.8611,
+    "avg_price": 43.9809,
+    "annual_return": 8.8398,
+    "fund_yi": 6499.62,
+    "people_wan": 59.4,
+    "listing_serial": 45982.0
+  },
+  {
+    "code": "920160",
+    "name": "北矿检测",
+    "apply_date": "2025-11-03",
+    "price": 6.7,
+    "pe": 14.99,
+    "ind_pe": 38.77,
+    "win_rate": 0.0002273565,
+    "funds_needed": 294.7,
+    "gain_pct": 3.3715,
+    "profit": 2259.0,
+    "cum_gain": 2.2179,
+    "avg_price": 29.2891,
+    "annual_return": 9.3259,
+    "fund_yi": 7511.1,
+    "people_wan": 59.15,
+    "listing_serial": 45979.0
+  },
+  {
+    "code": "920003",
+    "name": "中诚咨询",
+    "apply_date": "2025-10-28",
+    "price": 14.27,
+    "pe": 9.69,
+    "ind_pe": 40.16,
+    "win_rate": 0.0002666904,
+    "funds_needed": 535.08,
+    "gain_pct": 1.8174,
+    "profit": 2593.0,
+    "cum_gain": 1.0224,
+    "avg_price": 40.2044,
+    "annual_return": 5.897,
+    "fund_yi": 6741.97,
+    "people_wan": 48.21,
+    "listing_serial": 45968.0
+  },
+  {
+    "code": "920009",
+    "name": "丹娜生物",
+    "apply_date": "2025-10-22",
+    "price": 17.1,
+    "pe": 11.75,
+    "ind_pe": 31.59,
+    "win_rate": 0.0002008426,
+    "funds_needed": 851.42,
+    "gain_pct": 4.731,
+    "profit": 8090.0,
+    "cum_gain": 1.2766,
+    "avg_price": 97.9998,
+    "annual_return": 11.5605,
+    "fund_yi": 6130.17,
+    "people_wan": 55.32,
+    "listing_serial": 45964.0
+  },
+  {
+    "code": "920020",
+    "name": "泰凯英",
+    "apply_date": "2025-10-15",
+    "price": 7.5,
+    "pe": 11.02,
+    "ind_pe": 26.82,
+    "win_rate": 0.00038663200000000003,
+    "funds_needed": 193.99,
+    "gain_pct": 1.8026,
+    "profit": 1352.0,
+    "cum_gain": 0.9733,
+    "avg_price": 21.0192,
+    "annual_return": 8.479,
+    "fund_yi": 7725.37,
+    "people_wan": 49.72,
+    "listing_serial": 45958.0
+  },
+  {
+    "code": "920158",
+    "name": "长江能科",
+    "apply_date": "2025-09-24",
+    "price": 5.33,
+    "pe": 14.99,
+    "ind_pe": 36.78,
+    "win_rate": 0.00020868769999999998,
+    "funds_needed": 255.41,
+    "gain_pct": 2.8131,
+    "profit": 1499.0,
+    "cum_gain": 0.8893,
+    "avg_price": 20.3236,
+    "annual_return": 7.1423,
+    "fund_yi": 7279.06,
+    "people_wan": 64.26,
+    "listing_serial": 45946.0
+  },
+  {
+    "code": "920080",
+    "name": "奥美森",
+    "apply_date": "2025-09-22",
+    "price": 8.25,
+    "pe": 12.52,
+    "ind_pe": 36.54,
+    "win_rate": 0.0002225435,
+    "funds_needed": 370.72,
+    "gain_pct": 3.475,
+    "profit": 2867.0,
+    "cum_gain": 1.7855,
+    "avg_price": 36.9189,
+    "annual_return": 9.4089,
+    "fund_yi": 7043.57,
+    "people_wan": 59.88,
+    "listing_serial": 45940.0
+  },
+  {
+    "code": "920015",
+    "name": "锦华新材",
+    "apply_date": "2025-09-16",
+    "price": 18.15,
+    "pe": 11.52,
+    "ind_pe": 27.57,
+    "win_rate": 0.0006617286999999999,
+    "funds_needed": 274.29,
+    "gain_pct": 1.2034,
+    "profit": 2184.0,
+    "cum_gain": 1.3747,
+    "avg_price": 39.9912,
+    "annual_return": 9.6881,
+    "fund_yi": 8511.87,
+    "people_wan": 52.49,
+    "listing_serial": 45925.0
+  },
+  {
+    "code": "920022",
+    "name": "世昌股份",
+    "apply_date": "2025-09-09",
+    "price": 10.9,
+    "pe": 10.32,
+    "ind_pe": 28.77,
+    "win_rate": 0.000250271,
+    "funds_needed": 435.53,
+    "gain_pct": 3.0465,
+    "profit": 3321.0,
+    "cum_gain": 1.1514,
+    "avg_price": 44.1067,
+    "annual_return": 9.2764,
+    "fund_yi": 6495.9,
+    "people_wan": 59.0,
+    "listing_serial": 45919.0
+  },
+  {
+    "code": "920100",
+    "name": "三协电机",
+    "apply_date": "2025-08-26",
+    "price": 8.83,
+    "pe": 11.86,
+    "ind_pe": 21.85,
+    "win_rate": 0.00022414509999999998,
+    "funds_needed": 393.95,
+    "gain_pct": 7.3678,
+    "profit": 6506.0,
+    "cum_gain": 6.4983,
+    "avg_price": 73.8881,
+    "annual_return": 20.0924,
+    "fund_yi": 6736.4,
+    "people_wan": 66.79,
+    "listing_serial": 45908.0
+  },
+  {
+    "code": "920112",
+    "name": "巴兰仕",
+    "apply_date": "2025-08-19",
+    "price": 15.78,
+    "pe": 10.15,
+    "ind_pe": 32.75,
+    "win_rate": 0.0003872271,
+    "funds_needed": 407.52,
+    "gain_pct": 2.0394,
+    "profit": 3218.0,
+    "cum_gain": 0.839,
+    "avg_price": 47.962,
+    "annual_return": 9.6081,
+    "fund_yi": 7355.61,
+    "people_wan": 62.12,
+    "listing_serial": 45897.0
+  },
+  {
+    "code": "920056",
+    "name": "能之光",
+    "apply_date": "2025-08-13",
+    "price": 7.21,
+    "pe": 11.28,
+    "ind_pe": 23.01,
+    "win_rate": 0.00017932320000000002,
+    "funds_needed": 402.07,
+    "gain_pct": 3.6954,
+    "profit": 2664.0,
+    "cum_gain": 1.8655,
+    "avg_price": 33.8541,
+    "annual_return": 8.0625,
+    "fund_yi": 5645.43,
+    "people_wan": 70.48,
+    "listing_serial": 45891.0
+  },
+  {
+    "code": "920018",
+    "name": "宏远股份",
+    "apply_date": "2025-08-11",
+    "price": 9.17,
+    "pe": 12.34,
+    "ind_pe": 21.32,
+    "win_rate": 0.0003607895,
+    "funds_needed": 254.17,
+    "gain_pct": 3.4071,
+    "profit": 3124.0,
+    "cum_gain": 1.7568,
+    "avg_price": 40.4131,
+    "annual_return": 14.9555,
+    "fund_yi": 7408.33,
+    "people_wan": 67.81,
+    "listing_serial": 45889.0
+  },
+  {
+    "code": "920101",
+    "name": "志高机械",
+    "apply_date": "2025-08-05",
+    "price": 17.41,
+    "pe": 14.5,
+    "ind_pe": 31.38,
+    "win_rate": 0.0005,
+    "funds_needed": 348.2,
+    "gain_pct": 2.6398,
+    "profit": 4596.0,
+    "cum_gain": 0.7863,
+    "avg_price": 63.3689,
+    "annual_return": 16.0588,
+    "fund_yi": 7315.54,
+    "people_wan": 61.2,
+    "listing_serial": 45883.0
+  }
+]; // __EMBEDDED_DATA_END__
+</script>
+
+<!-- ===== Main Application ===== -->
+<script>
+(function(){
+// ============ SVG Helper ============
+function svgEl(tag, attrs) {
+  var el = document.createElementNS('http://www.w3.org/2000/svg', tag);
+  for (var k in attrs) el.setAttribute(k, attrs[k]);
+  return el;
+}
+function makeSvg(w,h) {
+  return svgEl('svg',{width:w,height:h,viewBox:'0 0 '+w+' '+h,style:'max-width:100%;height:auto;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif'});
+}
+
+// ============ Data Processing ============
+function processData(rawData) {
+  var now = new Date();
+  var cutoff = new Date(now.getTime() - 185 * 24 * 60 * 60 * 1000);
+  var cutoffStr = cutoff.toISOString().split('T')[0];
+
+  // Filter BSE + date
+  var filtered = rawData.filter(function(d) {
+    return d.apply_date && d.apply_date >= cutoffStr && String(d.code).startsWith('920');
+  });
+
+  // Sort by date desc
+  filtered.sort(function(a,b) { return b.apply_date.localeCompare(a.apply_date); });
+
+  // Split listed vs unlisted
+  var listed = filtered.filter(function(d) { return d.gain_pct != null; });
+  var unlisted = filtered.filter(function(d) { return d.gain_pct == null; });
+
+  // Compute stats
+  function avg(arr, field) {
+    var vals = arr.map(function(d) { return d[field]; }).filter(function(v) { return v != null && !isNaN(v); });
+    if (vals.length === 0) return null;
+    return vals.reduce(function(a,b) { return a+b; }, 0) / vals.length;
+  }
+  function med(arr, field) {
+    var vals = arr.map(function(d) { return d[field]; }).filter(function(v) { return v != null && !isNaN(v); });
+    if (vals.length === 0) return null;
+    vals.sort(function(a,b) { return a-b; });
+    return vals[Math.floor(vals.length/2)];
+  }
+  function max(arr, field) {
+    var best = null, bestD = null;
+    arr.forEach(function(d) {
+      if (d[field] != null && (best == null || d[field] > best)) { best = d[field]; bestD = d; }
+    });
+    return {val:best, item:bestD};
+  }
+  function min(arr, field) {
+    var best = null, bestD = null;
+    arr.forEach(function(d) {
+      if (d[field] != null && (best == null || d[field] < best)) { best = d[field]; bestD = d; }
+    });
+    return {val:best, item:bestD};
+  }
+
+  // Monthly grouping
+  var monthlyMap = {};
+  filtered.forEach(function(d) {
+    if (!d.apply_date) return;
+    var m = d.apply_date.substring(0,7);
+    if (!monthlyMap[m]) monthlyMap[m] = [];
+    monthlyMap[m].push(d);
+  });
+  var monthlyArr = Object.keys(monthlyMap).sort().map(function(m) {
+    var arr = monthlyMap[m];
+    var list = arr.filter(function(d) { return d.gain_pct != null; });
+    return {
+      month: m,
+      count: arr.length,
+      avg_price: avg(arr, 'price'),
+      avg_win_rate: avg(arr, 'win_rate'),
+      avg_fund: avg(arr, 'fund_yi'),
+      avg_gain_pct: avg(list, 'gain_pct'),
+      avg_profit: avg(list, 'profit')
+    };
+  });
+
+  // Gain distribution bins
+  var gainBins = {'50-100%':0,'100-200%':0,'200-300%':0,'300-500%':0,'>500%':0};
+  listed.forEach(function(d) {
+    var g = d.gain_pct * 100; // convert decimal to percentage
+    if (g < 100) gainBins['50-100%']++;
+    else if (g < 200) gainBins['100-200%']++;
+    else if (g < 300) gainBins['200-300%']++;
+    else if (g < 500) gainBins['300-500%']++;
+    else gainBins['>500%']++;
+  });
+
+  // Price distribution
+  var priceBins = {'<10元':0,'10-20元':0,'20-30元':0,'≥30元':0};
+  filtered.forEach(function(d) {
+    if (!d.price) return;
+    if (d.price < 10) priceBins['<10元']++;
+    else if (d.price < 20) priceBins['10-20元']++;
+    else if (d.price < 30) priceBins['20-30元']++;
+    else priceBins['≥30元']++;
+  });
+
+  // Top gainers by profit
+  var topGainers = listed.slice().sort(function(a,b) { return (b.profit||0) - (a.profit||0); }).slice(0,10);
+
+  // Top cumulative
+  var topCum = listed.slice().sort(function(a,b) { return (b.cum_gain||0) - (a.cum_gain||0); }).slice(0,8);
+
+  var broken = listed.filter(function(d) { return d.gain_pct < 0; }).length;
+
+  return {
+    all: filtered,
+    listed: listed,
+    unlisted: unlisted,
+    total: filtered.length,
+    nListed: listed.length,
+    nUnlisted: unlisted.length,
+    dateMin: filtered.length > 0 ? filtered[filtered.length-1].apply_date : '',
+    dateMax: filtered.length > 0 ? filtered[0].apply_date : '',
+    cutoffDate: cutoffStr,
+    avgPrice: avg(filtered, 'price'),
+    avgPE: avg(filtered, 'pe'),
+    avgIndPE: avg(filtered, 'ind_pe'),
+    avgWinRate: avg(filtered, 'win_rate'),
+    avgFundsNeeded: avg(filtered, 'funds_needed'),
+    avgGainPct: avg(listed, 'gain_pct'),
+    medGainPct: med(listed, 'gain_pct'),
+    avgProfit: avg(listed, 'profit'),
+    maxProfit: max(listed, 'profit'),
+    maxGain: max(listed, 'gain_pct'),
+    minGain: min(listed, 'gain_pct'),
+    avgFund: avg(filtered, 'fund_yi'),
+    avgPeople: avg(filtered, 'people_wan'),
+    maxFund: max(filtered, 'fund_yi'),
+    broken: broken,
+    avgAnnual: avg(listed, 'annual_return'),
+    avgCumGain: avg(listed, 'cum_gain'),
+    monthly: monthlyArr,
+    gainBins: gainBins,
+    priceBins: priceBins,
+    topGainers: topGainers,
+    topCum: topCum
+  };
+}
+
+// ============ Render Functions ============
+function renderAll(stats) {
+  renderStats(stats);
+  renderGainDistChart(stats);
+  renderPriceDistChart(stats);
+  renderTopGainersTable(stats);
+  renderCumGainChart(stats);
+  renderMonthlyIPOChart(stats);
+  renderMonthlyGainChart(stats);
+  renderMonthlyTable(stats);
+  renderAllStocksTable(stats);
+  updateMeta(stats);
+}
+
+function updateMeta(stats) {
+  document.getElementById('hero-date-range').textContent =
+    '统计区间：' + stats.dateMin + ' ~ ' + stats.dateMax + ' ｜ 共 ' + stats.total + ' 只新股';
+  document.getElementById('overview-desc').textContent =
+    stats.total + '只新股全景扫描（申购日 ≥ ' + stats.cutoffDate + '），一张图看懂北交所打新的赚钱效应。';
+  document.getElementById('table-desc').textContent =
+    '申购日在 ' + stats.cutoffDate + ' 之后的全部北交所新股，按申购日倒序排列。';
+  document.getElementById('footer-info').textContent =
+    '数据来源：东方财富数据中心 | 自动获取 | 筛选近半年（≥' + stats.cutoffDate + '）';
+}
+
+function renderStats(stats) {
+  var html = '';
+  function card(cls, val, label, sub) {
+    html += '<div class="stat-card '+cls+'"><div class="value">'+val+'</div><div class="label">'+label+'</div><div class="sub">'+sub+'</div></div>';
+  }
+  card('green', stats.avgGainPct ? (stats.avgGainPct*100).toFixed(0)+'<span style="font-size:0.5em">%</span>' : '-', '首日平均涨幅', stats.medGainPct ? '中位数 '+(stats.medGainPct*100).toFixed(0)+'%' : '');
+  card('accent', stats.broken, '首日破发数量', '胜率 100%');
+  card('blue', stats.avgProfit ? stats.avgProfit.toFixed(0)+'<span style="font-size:0.5em"> 元</span>' : '-', '每百股平均获利', stats.maxProfit.val ? '最高 '+(stats.maxProfit.val).toFixed(0)+' 元' : '');
+  card('orange', stats.avgPE ? stats.avgPE.toFixed(1)+'<span style="font-size:0.5em"> 倍</span>' : '-', '平均发行市盈率', stats.avgIndPE ? '行业均值 '+stats.avgIndPE.toFixed(1)+' 倍' : '');
+  card('', stats.avgWinRate ? (stats.avgWinRate*10000).toFixed(1) : '-', '平均中签率（万分之）', stats.avgFundsNeeded ? '稳获百股需约 '+stats.avgFundsNeeded.toFixed(0)+' 万' : '');
+  card('', stats.avgFund ? (stats.avgFund/1).toFixed(0)+'<span style="font-size:0.5em"> 亿</span>' : '-', '平均单只冻结资金', stats.avgPeople ? '约 '+stats.avgPeople.toFixed(0)+' 万人参与' : '');
+  document.getElementById('stat-grid').innerHTML = html;
+}
+
+// Pie chart - Gain Distribution
+function renderGainDistChart(stats) {
+  var W=500, H=360, cx=W/2, cy=H/2, r=120;
+  var bins = [
+    {label:'50-100%',val:stats.gainBins['50-100%'],color:'#f9e79f'},
+    {label:'100-200%',val:stats.gainBins['100-200%'],color:'#f8c471'},
+    {label:'200-300%',val:stats.gainBins['200-300%'],color:'#f0b27a'},
+    {label:'300-500%',val:stats.gainBins['300-500%'],color:'#e59866'},
+    {label:'>500%',val:stats.gainBins['>500%'],color:'#e74c3c'}
+  ];
+  var total = 0; bins.forEach(function(b){ total+=b.val; });
+  var svg = makeSvg(W,H);
+  var g = svgEl('g',{transform:'translate('+cx+','+cy+')'});
+  svg.appendChild(g);
+  var angle = -Math.PI/2;
+  bins.forEach(function(b){
+    var sa = (b.val/total)*2*Math.PI;
+    var x1=r*Math.cos(angle), y1=r*Math.sin(angle);
+    var x2=r*Math.cos(angle+sa), y2=r*Math.sin(angle+sa);
+    var d='M 0 0 L '+x1+' '+y1+' A '+r+' '+r+' 0 '+(sa>Math.PI?1:0)+' 1 '+x2+' '+y2+' Z';
+    g.appendChild(svgEl('path',{d:d,fill:b.color,stroke:'#fff','stroke-width':2}));
+    var ma=angle+sa/2, lr=r+28;
+    var t=svgEl('text',{x:lr*Math.cos(ma),y:lr*Math.sin(ma),'text-anchor':Math.cos(ma)>0?'start':'end','dominant-baseline':'middle','font-size':12,fill:'#2c3e50'});
+    t.textContent=b.label+' '+b.val+'只';
+    g.appendChild(t);
+    angle+=sa;
+  });
+  g.appendChild(svgEl('circle',{cx:0,cy:0,r:50,fill:'#fff'}));
+  var ct=svgEl('text',{x:0,y:-6,'text-anchor':'middle','font-size':13,fill:'#7f8c8d'});
+  ct.textContent='已上市'; g.appendChild(ct);
+  var cv=svgEl('text',{x:0,y:16,'text-anchor':'middle','font-size':18,fill:'#e74c3c','font-weight':'bold'});
+  cv.textContent=total+'只'; g.appendChild(cv);
+  document.getElementById('chart-gain-dist').innerHTML='';
+  document.getElementById('chart-gain-dist').appendChild(svg);
+}
+
+// Bar chart - Price Distribution
+function renderPriceDistChart(stats) {
+  var W=500, H=360, pad={top:30,right:30,bottom:60,left:50};
+  var pw=W-pad.left-pad.right, ph=H-pad.top-pad.bottom;
+  var labels=['<10元','10-20元','20-30元','≥30元'];
+  var vals=labels.map(function(l){return stats.priceBins[l]||0;});
+  var maxV=Math.max.apply(null,vals)+5;
+  var svg=makeSvg(W,H);
+  var g=svgEl('g',{transform:'translate('+pad.left+','+pad.top+')'});
+  svg.appendChild(g);
+  for(var i=0;i<=maxV;i+=5){
+    var y=ph-(i/maxV)*ph;
+    g.appendChild(svgEl('line',{x1:0,y1:y,x2:pw,y2:y,stroke:'#eee','stroke-width':1}));
+    var l=svgEl('text',{x:-10,y:y,'text-anchor':'end','dominant-baseline':'middle','font-size':11,fill:'#999'});
+    l.textContent=i; g.appendChild(l);
+  }
+  var colors=['#2980b9','#27ae60','#f39c12','#e74c3c'];
+  var bw=pw/labels.length*0.55, gap=pw/labels.length;
+  labels.forEach(function(l,i){
+    var x=gap*i+(gap-bw)/2, h=(vals[i]/maxV)*ph, y=ph-h;
+    var rect=svgEl('rect',{x:x,y:y,width:bw,height:h,rx:6,ry:6,fill:colors[i],opacity:0.85});
+    g.appendChild(rect);
+    var vl=svgEl('text',{x:x+bw/2,y:y-10,'text-anchor':'middle','font-size':14,'font-weight':'bold',fill:'#2c3e50'});
+    vl.textContent=vals[i]; g.appendChild(vl);
+    var xl=svgEl('text',{x:x+bw/2,y:ph+22,'text-anchor':'middle','font-size':13,fill:'#555'});
+    xl.textContent=l; g.appendChild(xl);
+  });
+  document.getElementById('chart-price-dist').innerHTML='';
+  document.getElementById('chart-price-dist').appendChild(svg);
+}
+
+// Table - Top Gainers
+function renderTopGainersTable(stats) {
+  var html='';
+  stats.topGainers.forEach(function(d,i){
+    html+='<tr><td style="text-align:left">'+(i+1)+'</td><td style="text-align:left;font-weight:600">'+d.name+'</td><td>'+(d.price?d.price.toFixed(1):'-')+'</td><td>'+(d.pe?d.pe.toFixed(1):'-')+'</td><td>'+(d.avg_price?d.avg_price.toFixed(1):'-')+'</td><td class="gain-up">+'+(d.gain_pct*100).toFixed(0)+'%</td><td class="gain-up">'+(d.profit||0).toLocaleString()+'</td><td>'+(d.annual_return?d.annual_return.toFixed(2):'-')+'%</td></tr>';
+  });
+  document.getElementById('tbody-top-gainers').innerHTML=html;
+}
+
+// Horizontal bar - Cumulative Gain
+function renderCumGainChart(stats) {
+  var W=780, H=380, pad={top:15,right:100,bottom:10,left:80};
+  var pw=W-pad.left-pad.right, ph=H-pad.top-pad.bottom;
+  var data=stats.topCum.slice().reverse();
+  var maxV=Math.max.apply(null,data.map(function(d){return d.cum_gain||0;}))*1.1;
+  var svg=makeSvg(W,H);
+  var g=svgEl('g',{transform:'translate('+pad.left+','+pad.top+')'});
+  svg.appendChild(g);
+  for(var i=0;i<=maxV;i+=Math.ceil(maxV/5)){
+    var x=(i/maxV)*pw;
+    g.appendChild(svgEl('line',{x1:x,y1:0,x2:x,y2:ph,stroke:'#eee','stroke-width':1}));
+    var l=svgEl('text',{x:x,y:ph+16,'text-anchor':'middle','font-size':11,fill:'#999'});
+    l.textContent=(i*100).toFixed(0)+'%'; g.appendChild(l);
+  }
+  var barH=30, gap=8;
+  data.forEach(function(d,i){
+    var y=i*(barH+gap), w=(d.cum_gain||0)/maxV*pw;
+    var rect=svgEl('rect',{x:0,y:y,width:Math.max(w,2),height:barH,rx:4,ry:4,fill:'#e74c3c',opacity:0.85});
+    g.appendChild(rect);
+    var nl=svgEl('text',{x:-8,y:y+barH/2,'text-anchor':'end','dominant-baseline':'middle','font-size':13,fill:'#2c3e50','font-weight':500});
+    nl.textContent=d.name; g.appendChild(nl);
+    var vl=svgEl('text',{x:w+8,y:y+barH/2,'text-anchor':'start','dominant-baseline':'middle','font-size':13,'font-weight':'bold',fill:'#e74c3c'});
+    vl.textContent='+'+(d.cum_gain*100).toFixed(0)+'%'; g.appendChild(vl);
+    var dl=svgEl('text',{x:w+8,y:y+barH/2+14,'text-anchor':'start','font-size':10,fill:'#999'});
+    dl.textContent=(d.price?d.price.toFixed(1):'?')+' → '+(d.avg_price?d.avg_price.toFixed(1):'?'); g.appendChild(dl);
+  });
+  document.getElementById('chart-cum-gain').innerHTML='';
+  document.getElementById('chart-cum-gain').appendChild(svg);
+}
+
+// Combo chart - Monthly IPO Count + Fund
+function renderMonthlyIPOChart(stats) {
+  var W=540, H=360, pad={top:20,right:55,bottom:55,left:50};
+  var pw=W-pad.left-pad.right, ph=H-pad.top-pad.bottom;
+  var months=stats.monthly.map(function(d){return d.month.substring(5);});
+  var counts=stats.monthly.map(function(d){return d.count;});
+  var funds=stats.monthly.map(function(d){return d.avg_fund||0;});
+  var maxC=Math.max.apply(null,counts)+3, maxF=Math.max.apply(null,funds)*1.15;
+  var svg=makeSvg(W,H);
+  var g=svgEl('g',{transform:'translate('+pad.left+','+pad.top+')'});
+  svg.appendChild(g);
+  for(var i=0;i<=maxC;i+=2){
+    var y=ph-(i/maxC)*ph;
+    g.appendChild(svgEl('line',{x1:0,y1:y,x2:pw,y2:y,stroke:'#eee','stroke-width':1}));
+  }
+  var bw=pw/months.length*0.4, gap=pw/months.length;
+  months.forEach(function(m,i){
+    var x=gap*i+(gap-bw)/2, h=(counts[i]/maxC)*ph, y=ph-h;
+    var rect=svgEl('rect',{x:x,y:y,width:bw,height:h,rx:5,ry:5,fill:'#2980b9',opacity:0.85});
+    g.appendChild(rect);
+    var vl=svgEl('text',{x:x+bw/2,y:y-8,'text-anchor':'middle','font-size':12,'font-weight':'bold',fill:'#2980b9'});
+    vl.textContent=counts[i]; g.appendChild(vl);
+  });
+  var pts='';
+  months.forEach(function(m,i){
+    var x=gap*i+gap/2, y=ph-(funds[i]/maxF)*ph;
+    pts+=(i?' ':'')+x+','+y;
+    g.appendChild(svgEl('circle',{cx:x,cy:y,r:5,fill:'#e74c3c',stroke:'#fff','stroke-width':2}));
+  });
+  g.appendChild(svgEl('polyline',{points:pts,fill:'none',stroke:'#e74c3c','stroke-width':2.5}));
+  months.forEach(function(m,i){
+    var xl=svgEl('text',{x:gap*i+gap/2,y:ph+20,'text-anchor':'middle','font-size':12,fill:'#555'});
+    xl.textContent=m; g.appendChild(xl);
+  });
+  // Legend
+  var lg1=svgEl('rect',{x:10,y:ph+36,width:12,height:12,fill:'#2980b9',opacity:0.85}); g.appendChild(lg1);
+  g.appendChild(svgEl('text',{x:26,y:ph+47,'font-size':11,fill:'#555','text-anchor':'start'}).appendChild(document.createTextNode('发行数量(只)')));
+  var lg2=svgEl('line',{x1:110,x2:130,y1:ph+42,y2:ph+42,stroke:'#e74c3c','stroke-width':2.5}); g.appendChild(lg2);
+  g.appendChild(svgEl('text',{x:134,y:ph+47,'font-size':11,fill:'#555','text-anchor':'start'}).appendChild(document.createTextNode('冻结资金(亿)')));
+  document.getElementById('chart-monthly-ipo').innerHTML='';
+  document.getElementById('chart-monthly-ipo').appendChild(svg);
+}
+
+// Combo chart - Monthly Gain + Profit
+function renderMonthlyGainChart(stats) {
+  var W=540, H=360, pad={top:20,right:55,bottom:55,left:55};
+  var pw=W-pad.left-pad.right, ph=H-pad.top-pad.bottom;
+  var months=stats.monthly.map(function(d){return d.month.substring(5);});
+  var gains=stats.monthly.map(function(d){return (d.avg_gain_pct||0)*100;});
+  var profits=stats.monthly.map(function(d){return d.avg_profit||0;});
+  var maxG=Math.max.apply(null,gains)*1.2||100, maxP=Math.max.apply(null,profits)*1.2||100;
+  var svg=makeSvg(W,H);
+  var g=svgEl('g',{transform:'translate('+pad.left+','+pad.top+')'});
+  svg.appendChild(g);
+  for(var i=0;i<=maxG;i+=Math.ceil(maxG/5)){
+    var y=ph-(i/maxG)*ph;
+    g.appendChild(svgEl('line',{x1:0,y1:y,x2:pw,y2:y,stroke:'#eee','stroke-width':1}));
+  }
+  var bw=pw/months.length*0.4, gap=pw/months.length;
+  months.forEach(function(m,i){
+    var x=gap*i+(gap-bw)/2, h=(gains[i]/maxG)*ph, y=ph-h;
+    var rect=svgEl('rect',{x:x,y:y,width:bw,height:Math.max(h,1),rx:5,ry:5,fill:'#27ae60',opacity:0.8});
+    g.appendChild(rect);
+    var vl=svgEl('text',{x:x+bw/2,y:y-8,'text-anchor':'middle','font-size':11,'font-weight':'bold',fill:'#27ae60'});
+    vl.textContent=gains[i].toFixed(0)+'%'; g.appendChild(vl);
+  });
+  var pts='';
+  months.forEach(function(m,i){
+    var x=gap*i+gap/2, y=ph-(profits[i]/maxP)*ph;
+    pts+=(i?' ':'')+x+','+y;
+    g.appendChild(svgEl('circle',{cx:x,cy:y,r:5,fill:'#f39c12',stroke:'#fff','stroke-width':2}));
+    var vl=svgEl('text',{x:x,y:y-12,'text-anchor':'middle','font-size':11,'font-weight':'bold',fill:'#f39c12'});
+    vl.textContent=profits[i].toFixed(0); g.appendChild(vl);
+  });
+  g.appendChild(svgEl('polyline',{points:pts,fill:'none',stroke:'#f39c12','stroke-width':2.5}));
+  months.forEach(function(m,i){
+    var xl=svgEl('text',{x:gap*i+gap/2,y:ph+20,'text-anchor':'middle','font-size':12,fill:'#555'});
+    xl.textContent=m; g.appendChild(xl);
+  });
+  var lg1=svgEl('rect',{x:10,y:ph+36,width:12,height:12,fill:'#27ae60',opacity:0.8}); g.appendChild(lg1);
+  g.appendChild(svgEl('text',{x:26,y:ph+47,'font-size':11,fill:'#555','text-anchor':'start'}).appendChild(document.createTextNode('首日涨幅(%)')));
+  var lg2=svgEl('line',{x1:110,x2:130,y1:ph+42,y2:ph+42,stroke:'#f39c12','stroke-width':2.5}); g.appendChild(lg2);
+  g.appendChild(svgEl('text',{x:134,y:ph+47,'font-size':11,fill:'#555','text-anchor':'start'}).appendChild(document.createTextNode('百股获利(元)')));
+  document.getElementById('chart-monthly-gain').innerHTML='';
+  document.getElementById('chart-monthly-gain').appendChild(svg);
+}
+
+// Monthly table
+function renderMonthlyTable(stats) {
+  var html='';
+  stats.monthly.forEach(function(d){
+    var g=d.avg_gain_pct?'<span class="gain-up">+'+(d.avg_gain_pct*100).toFixed(0)+'%</span>':'<span style="color:#999">待上市</span>';
+    var p=d.avg_profit?d.avg_profit.toFixed(0):'-';
+    html+='<tr><td style="text-align:left;font-weight:500">'+d.month+'</td><td>'+d.count+'</td><td>'+(d.avg_price?d.avg_price.toFixed(1):'-')+'</td><td>'+(d.avg_win_rate?(d.avg_win_rate*10000).toFixed(1):'-')+'</td><td>'+(d.avg_fund?d.avg_fund.toFixed(0):'-')+'</td><td>'+g+'</td><td class="gain-up">'+p+'</td></tr>';
+  });
+  document.getElementById('tbody-monthly').innerHTML=html;
+}
+
+// All stocks table
+function renderAllStocksTable(stats) {
+  var html='';
+  stats.all.forEach(function(d){
+    var gain=d.gain_pct!=null?'<span class="gain-up">+'+(d.gain_pct*100).toFixed(0)+'%</span>':'-';
+    var profit=d.profit!=null?'<span class="gain-up">'+d.profit.toLocaleString()+'</span>':'-';
+    var cum=d.cum_gain!=null?'<span class="gain-up">+'+(d.cum_gain*100).toFixed(0)+'%</span>':'-';
+    var wr=d.win_rate!=null?(d.win_rate*10000).toFixed(1):'-';
+    var fn=d.funds_needed!=null?d.funds_needed.toFixed(0):'-';
+    html+='<tr><td style="text-align:left">'+d.code+'</td><td style="text-align:left;font-weight:500">'+d.name+'</td><td style="text-align:left">'+d.apply_date+'</td><td>'+(d.price?d.price.toFixed(1):'-')+'</td><td>'+(d.pe?d.pe.toFixed(1):'-')+'</td><td>'+(d.ind_pe?d.ind_pe.toFixed(1):'-')+'</td><td>'+wr+'</td><td>'+fn+'</td><td>'+gain+'</td><td>'+profit+'</td><td>'+cum+'</td></tr>';
+  });
+  document.getElementById('tbody-all-stocks').innerHTML=html;
+}
+
+// ============ API Fetch ============
+function transformAPIData(rawList) {
+  return rawList.map(function(r) {
+    var ip=parseFloat(r.ISSUE_PRICE)||null;
+    var np=parseFloat(r.NEWEST_PRICE)||null;
+    var ap=parseFloat(r.AVERAGE_PRICE)||null;
+    var ol=parseFloat(r.ONLINE_ISSUE_LWR)||null;
+    var ld=parseFloat(r.LD_CLOSE_CHANGE)||null;
+    var ps=parseFloat(r.PER_SHARES_INCOME)||null;
+    var cp=parseFloat(r.CAPTURE_PROFIT)||null;
+    var ad=r.APPLY_DATE?r.APPLY_DATE.trim().split(' ')[0]:null;
+    var cc=null;
+    if(np&&ip&&ip>0) cc=np/ip-1;
+
+    return {
+      code: r.SECURITY_CODE,
+      name: r.SECURITY_NAME_ABBR,
+      apply_date: ad,
+      price: ip,
+      pe: parseFloat(r.ISSUE_PE_RATIO)||null,
+      ind_pe: parseFloat(r.INDUSTRY_PE_RATIO)||null,
+      win_rate: ol?ol/100:null,
+      funds_needed: parseFloat(r.APPLY_AMT_100)?parseFloat(r.APPLY_AMT_100)/10000:null,
+      gain_pct: ld?ld/100:null,
+      profit: ps||null,
+      cum_gain: cc,
+      avg_price: ap,
+      annual_return: cp||null,
+      fund_yi: parseFloat(r.VA_AMT)?parseFloat(r.VA_AMT)/1e8:null,
+      people_wan: parseFloat(r.ORG_VAN)?parseFloat(r.ORG_VAN)/1e4:null,
+      listing_serial: null
+    };
+  });
+}
+
+function fetchFromAPI(callback) {
+  var url='https://datacenter.eastmoney.com/api/data/v1/get';
+  var params='reportName=RPT_NEEQ_ISSUEINFO_LIST&columns=ALL&pageSize=100&pageNumber=1&sortColumns=APPLY_DATE&sortTypes=-1&source=WEB&client=WEB&filter=(APPLY_DATE%3E%3D%272025-08-01%27)';
+  var xhr=new XMLHttpRequest();
+  xhr.open('GET',url+'?'+params,true);
+  xhr.timeout=15000;
+  xhr.onload=function(){
+    if(xhr.status===200){
+      try{
+        var d=JSON.parse(xhr.responseText);
+        if(d.success&&d.result&&d.result.data){
+          var transformed=transformAPIData(d.result.data);
+          callback(null,transformed,'live');
+        }else{
+          callback(new Error('API返回数据异常'));
+        }
+      }catch(e){callback(e);}
+    }else{callback(new Error('HTTP '+xhr.status));}
+  };
+  xhr.onerror=function(){callback(new Error('网络请求失败'));};
+  xhr.ontimeout=function(){callback(new Error('请求超时'));};
+  xhr.send();
+}
+
+// ============ Main ============
+function main(data, source) {
+  var stats=processData(data);
+
+  // Update status badge
+  var badge=document.getElementById('data-status');
+  badge.textContent=source==='live'?'实时数据':'离线缓存';
+  badge.className=source==='live'?'live':'cached';
+
+  if(stats.total===0){
+    document.getElementById('loading-msg').textContent='没有找到近半年的北交所新股数据';
+    badge.textContent='无数据';
+    badge.className='error';
+    return;
+  }
+
+  renderAll(stats);
+  document.getElementById('loading-overlay').classList.add('done');
+}
+
+// Try API first, fall back to embedded
+document.getElementById('loading-msg').textContent='正在从东方财富获取最新数据...';
+
+fetchFromAPI(function(err, apiData, source) {
+  if (!err && apiData && apiData.length > 0) {
+    console.log('API data loaded: '+apiData.length+' records');
+    main(apiData, 'live');
+  } else {
+    console.log('API failed: '+(err?err.message:'no data')+', using embedded data');
+    document.getElementById('loading-msg').textContent='API获取失败，使用离线缓存数据...';
+    main(EMBEDDED_DATA, 'cached');
+  }
+});
+
+})();
+</script>
+</body>
+</html>
