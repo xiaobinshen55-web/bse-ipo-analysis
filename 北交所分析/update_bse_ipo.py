@@ -5,15 +5,16 @@
 - 同时刷新HTML报告中的嵌入式数据（离线也能打开）
 """
 
-import requests, json, time, sys, re
+import requests, json, time, sys, re, os
 import pandas as pd
 from datetime import datetime
 
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 API_URL = "https://datacenter.eastmoney.com/api/data/v1/get"
 REPORT_NAME = "RPT_NEEQ_ISSUEINFO_LIST"
 START_DATE = "2025-08-01"
-EXCEL_PATH = "/Users/jianjiandandan/Documents/AI学习/北交所新股情况.xlsx"
-HTML_PATH = "/Users/jianjiandandan/Documents/AI学习/index.html"
+EXCEL_PATH = os.path.join(SCRIPT_DIR, "北交所新股情况.xlsx")
+HTML_PATH = os.path.join(os.path.dirname(SCRIPT_DIR), "index.html")
 HEADERS = {"User-Agent": "Mozilla/5.0", "Referer": "https://data.eastmoney.com/xg/xg/"}
 
 def fetch_all():
