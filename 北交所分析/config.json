@@ -1,0 +1,40 @@
+{
+  "api": {
+    "url": "https://datacenter.eastmoney.com/api/data/v1/get",
+    "reportName": "RPT_NEEQ_ISSUEINFO_LIST",
+    "pageSize": 50,
+    "sortColumns": "APPLY_DATE",
+    "sortTypes": "-1",
+    "source": "WEB",
+    "client": "WEB"
+  },
+  "filter": {
+    "lookbackDays": 185,
+    "codePrefix": "920"
+  },
+  "fieldMapping": {
+    "SECURITY_CODE": { "excel": "代码", "json": "code", "convert": null },
+    "SECURITY_NAME_ABBR": { "excel": "简称", "json": "name", "convert": null },
+    "APPLY_CODE": { "excel": "申购代码", "json": null, "convert": null },
+    "ISSUE_PRICE": { "excel": "发行价格(元)", "json": "price", "convert": null },
+    "NEWEST_PRICE": { "excel": "最新价格(元)", "json": null, "convert": null },
+    "AVERAGE_PRICE": { "excel": "均价(元)", "json": "avg_price", "convert": null },
+    "EXPECT_ISSUE_NUM": { "excel": "发行总数(万股)", "json": null, "convert": "div10000" },
+    "ONLINE_ISSUE_NUM": { "excel": "网上发行数量(万股)", "json": null, "convert": "div10000" },
+    "APPLY_NUM_UPPER": { "excel": "申购上限(万股)", "json": null, "convert": "div10000" },
+    "APPLY_AMT_UPPER": { "excel": "顶格所需资金(万元)", "json": null, "convert": "div10000" },
+    "APPLY_AMT_100": { "excel": "稳获百股所需资金(万元)", "json": "funds_needed", "convert": "div10000" },
+    "ONLINE_ISSUE_LWR": { "excel": "中签率", "json": "win_rate", "convert": "div100" },
+    "LD_CLOSE_CHANGE": { "excel": "涨幅", "json": "gain_pct", "convert": "div100" },
+    "PER_SHARES_INCOME": { "excel": "每百股获利(元)", "json": "profit", "convert": null },
+    "CAPTURE_PROFIT": { "excel": "约合年化收益", "json": "annual_return", "convert": null },
+    "ISSUE_PE_RATIO": { "excel": "发行市盈率", "json": "pe", "convert": null },
+    "INDUSTRY_PE_RATIO": { "excel": "行业市盈率", "json": "ind_pe", "convert": null },
+    "VA_AMT": { "excel": "参与申购资金(亿)", "json": "fund_yi", "convert": "div1e8" },
+    "ORG_VAN": { "excel": "参与申购人数(万)", "json": "people_wan", "convert": "div1e4" }
+  },
+  "paths": {
+    "excel": "北交所新股情况.xlsx",
+    "html": "../index.html"
+  }
+}

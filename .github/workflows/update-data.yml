@@ -1,0 +1,31 @@
+name: Update BSE IPO Data
+
+on:
+  schedule:
+    # Beijing time 20:00 on weekdays (UTC 12:00), after market close
+    - cron: '23 12 * * 1-5'
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install pandas openpyxl requests
+
+      - name: Run update script
+        run: python 北交所分析/update_bse_ipo.py
+
+      - name: Commit updated data
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: 'auto: update BSE IPO embedded data'
+          file_pattern: 'index.html'

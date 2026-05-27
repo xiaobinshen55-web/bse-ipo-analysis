@@ -1,61 +1,126 @@
 #!/usr/bin/env python3
 """
-北交所新股数据更新脚本 v2
+北交所新股数据更新脚本 v3
+- 从 config.json 读取统一配置（字段映射、API参数）
+- 动态计算筛选日期（近185天）
 - 从东方财富API获取数据 → 更新Excel
 - 同时刷新HTML报告中的嵌入式数据（离线也能打开）
 """
 
 import requests, json, time, sys, re, os
 import pandas as pd
-from datetime import datetime
+from datetime import datetime, timedelta
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-API_URL = "https://datacenter.eastmoney.com/api/data/v1/get"
-REPORT_NAME = "RPT_NEEQ_ISSUEINFO_LIST"
-START_DATE = "2025-08-01"
-EXCEL_PATH = os.path.join(SCRIPT_DIR, "北交所新股情况.xlsx")
-HTML_PATH = os.path.join(os.path.dirname(SCRIPT_DIR), "index.html")
+
+def load_config():
+    config_path = os.path.join(SCRIPT_DIR, "config.json")
+    with open(config_path, "r", encoding="utf-8") as f:
+        return json.load(f)
+
+CFG = load_config()
+
+API_URL = CFG["api"]["url"]
+REPORT_NAME = CFG["api"]["reportName"]
+LOOKBACK = CFG["filter"]["lookbackDays"]
+CODE_PREFIX = CFG["filter"]["codePrefix"]
+START_DATE = (datetime.now() - timedelta(days=LOOKBACK)).strftime("%Y-%m-%d")
+
+EXCEL_PATH = os.path.join(SCRIPT_DIR, CFG["paths"]["excel"])
+HTML_PATH = os.path.join(SCRIPT_DIR, CFG["paths"]["html"])
+
 HEADERS = {"User-Agent": "Mozilla/5.0", "Referer": "https://data.eastmoney.com/xg/xg/"}
 
+# ---- converters from config ----
+def apply_convert(val, convert):
+    if convert is None or val is None:
+        return val
+    if convert == "div100":
+        return val / 100
+    if convert == "div10000":
+        return val / 10000
+    if convert == "div1e8":
+        return val / 1e8
+    if convert == "div1e4":
+        return val / 1e4
+    return val
+
+# ---- API fetch ----
 def fetch_all():
     all_data, page = [], 1
+    page_size = CFG["api"]["pageSize"]
+    sort_cols = CFG["api"]["sortColumns"]
+    sort_types = CFG["api"]["sortTypes"]
+    source = CFG["api"]["source"]
+    client = CFG["api"]["client"]
+
     while True:
-        params = {"reportName": REPORT_NAME, "columns": "ALL", "pageSize": "50", "pageNumber": str(page),
-                  "sortColumns": "APPLY_DATE", "sortTypes": "-1", "source": "WEB", "client": "WEB",
-                  "filter": f"(APPLY_DATE>='{START_DATE}')"}
+        params = {
+            "reportName": REPORT_NAME,
+            "columns": "ALL",
+            "pageSize": str(page_size),
+            "pageNumber": str(page),
+            "sortColumns": sort_cols,
+            "sortTypes": sort_types,
+            "source": source,
+            "client": client,
+            "filter": f"(APPLY_DATE>='{START_DATE}')"
+        }
         r = requests.get(API_URL, params=params, headers=HEADERS, timeout=30)
         data = r.json()
-        if not data.get("success"): break
+        if not data.get("success"):
+            break
         result = data["result"]
-        if not result.get("data"): break
+        if not result.get("data"):
+            break
         all_data.extend(result["data"])
-        if len(all_data) >= result["count"]: break
-        page += 1; time.sleep(0.3)
+        if len(all_data) >= result["count"]:
+            break
+        page += 1
+        time.sleep(0.3)
     return all_data
 
+# ---- data transform following config fieldMapping ----
 def transform(raw_data):
+    fm = CFG["fieldMapping"]
     rows = []
+
     for r in raw_data:
-        def f(val):
-            try: return float(val)
-            except: return None
-        ip = f(r.get("ISSUE_PRICE")); np_ = f(r.get("NEWEST_PRICE"))
-        ap = f(r.get("AVERAGE_PRICE")); ei = f(r.get("EXPECT_ISSUE_NUM"))
-        oi = f(r.get("ONLINE_ISSUE_NUM")); au = f(r.get("APPLY_NUM_UPPER"))
-        aa = f(r.get("APPLY_AMT_UPPER")); a100 = f(r.get("APPLY_AMT_100"))
-        ol = f(r.get("ONLINE_ISSUE_LWR")); ld = f(r.get("LD_CLOSE_CHANGE"))
-        ps = f(r.get("PER_SHARES_INCOME")); cp = f(r.get("CAPTURE_PROFIT"))
-        pe = f(r.get("ISSUE_PE_RATIO")); ipe = f(r.get("INDUSTRY_PE_RATIO"))
-        va = f(r.get("VA_AMT")); ov = f(r.get("ORG_VAN"))
+        def fv(field):
+            """extract and convert a field value from raw record"""
+            mapping = fm.get(field)
+            if not mapping:
+                return None
+            raw_val = r.get(field)
+            try:
+                val = float(raw_val) if raw_val is not None else None
+            except (ValueError, TypeError):
+                val = None
+            return apply_convert(val, mapping["convert"])
+
+        ip = fv("ISSUE_PRICE")
+        np_ = fv("NEWEST_PRICE")
+        ei = fv("EXPECT_ISSUE_NUM")
+        oi = fv("ONLINE_ISSUE_NUM")
+        au = fv("APPLY_NUM_UPPER")
+        aa = fv("APPLY_AMT_UPPER")
+        a100 = fv("APPLY_AMT_100")
+        ol = fv("ONLINE_ISSUE_LWR")
+        ld = fv("LD_CLOSE_CHANGE")
+        ps = fv("PER_SHARES_INCOME")
+        cp = fv("CAPTURE_PROFIT")
+        pe = fv("ISSUE_PE_RATIO")
+        ipe = fv("INDUSTRY_PE_RATIO")
+        va = fv("VA_AMT")
+        ov = fv("ORG_VAN")
 
         ad = pd.to_datetime(r["APPLY_DATE"]) if pd.notna(r.get("APPLY_DATE")) else None
         ld_dt = pd.to_datetime(r["SELECT_LISTING_DATE"]) if pd.notna(r.get("SELECT_LISTING_DATE")) else None
 
-        wr = ol / 100 if ol else None
-        fdc = ld / 100 if ld else None
+        # derived fields
         cc = round(np_ / ip - 1, 6) if np_ and ip and ip > 0 else None
 
-        wds = ["周一","周二","周三","周四","周五","周六","周日"]
+        wds = ["周一", "周二", "周三", "周四", "周五", "周六", "周日"]
         ds = ad.strftime("%m-%d ") + wds[ad.weekday()] if ad and pd.notna(ad) else None
 
         ls = None
@@ -64,34 +129,40 @@ def transform(raw_data):
 
         rows.append({
             "_sort_date": ad,
-            "代码": r.get("SECURITY_CODE"), "简称": r.get("SECURITY_NAME_ABBR"),
+            "代码": r.get("SECURITY_CODE"),
+            "简称": r.get("SECURITY_NAME_ABBR"),
             "申购代码": r.get("APPLY_CODE"),
-            "发行总数(万股)": round(ei/10000,0) if ei else None,
-            "网上发行数量(万股)": round(oi/10000,0) if oi else None,
-            "申购上限(万股)": round(au/10000,2) if au else None,
-            "顶格所需资金(万元)": round(aa/10000,2) if aa else None,
-            "发行价格(元)": ip, "申购日": ds, "中签率": wr,
-            "稳获百股所需资金(万元)": round(a100/10000,2) if a100 else None,
-            "最新价格(元)": np_, "累计涨幅": round(cc,4) if cc is not None else None,
-            "上市首日(序列)": ls, "均价(元)": ap,
-            "涨幅": round(fdc,4) if fdc is not None else None,
-            "每百股获利(元)": round(ps,0) if ps else None,
-            "约合年化收益": round(cp,4) if cp else None,
-            "发行市盈率": pe, "行业市盈率": ipe,
-            "参与申购资金(亿)": round(va/1e8,2) if va else None,
-            "参与申购人数(万)": round(ov/1e4,2) if ov else None,
+            "发行总数(万股)": round(ei, 0) if ei else None,
+            "网上发行数量(万股)": round(oi, 0) if oi else None,
+            "申购上限(万股)": round(au, 2) if au else None,
+            "顶格所需资金(万元)": round(aa, 2) if aa else None,
+            "发行价格(元)": ip,
+            "申购日": ds,
+            "中签率": ol,
+            "稳获百股所需资金(万元)": round(a100, 2) if a100 else None,
+            "最新价格(元)": np_,
+            "累计涨幅": round(cc, 4) if cc is not None else None,
+            "上市首日(序列)": ls,
+            "均价(元)": r.get("AVERAGE_PRICE") if pd.notna(r.get("AVERAGE_PRICE")) else None,
+            "涨幅": ld,
+            "每百股获利(元)": round(ps, 0) if ps else None,
+            "约合年化收益": round(cp, 4) if cp else None,
+            "发行市盈率": pe,
+            "行业市盈率": ipe,
+            "参与申购资金(亿)": round(va, 2) if va else None,
+            "参与申购人数(万)": round(ov, 2) if ov else None,
         })
     return pd.DataFrame(rows)
 
+# ---- HTML embedded data ----
 def build_html_embedded_json(df):
-    """从 DataFrame 构建嵌入 HTML 的 JSON 数据"""
     records = []
     for _, r in df.iterrows():
         ad = r.get("_sort_date")
         apply_date_str = ad.strftime("%Y-%m-%d") if ad and pd.notna(ad) else None
         records.append({
-            "code": str(r.get("代码","")),
-            "name": str(r.get("简称","")),
+            "code": str(r.get("代码", "")),
+            "name": str(r.get("简称", "")),
             "apply_date": apply_date_str,
             "price": float(r["发行价格(元)"]) if pd.notna(r.get("发行价格(元)")) else None,
             "pe": float(r["发行市盈率"]) if pd.notna(r.get("发行市盈率")) else None,
@@ -110,7 +181,6 @@ def build_html_embedded_json(df):
     return records
 
 def update_html_embedded(records):
-    """更新 HTML 文件中的嵌入式数据"""
     try:
         with open(HTML_PATH, 'r', encoding='utf-8') as f:
             html = f.read()
@@ -119,55 +189,64 @@ def update_html_embedded(records):
         return False
 
     json_str = json.dumps(records, ensure_ascii=False, indent=2)
-    # 替换 __EMBEDDED_DATA_PLACEHOLDER__ 之间的内容
+
+    # Replace EMBEDDED_DATA
     pattern = r'(const EMBEDDED_DATA = )[\s\S]*?(; // __EMBEDDED_DATA_END__)'
     replacement = r'\1' + json_str + r'\2'
     new_html = re.sub(pattern, replacement, html)
 
+    # Also inject the dynamic START_DATE for JS API filter
+    date_pattern = r'(const API_START_DATE = )".*?"(;)'
+    date_replacement = r'\1"' + START_DATE + r'"\2'
+    new_html = re.sub(date_pattern, date_replacement, new_html)
+
     if new_html == html:
-        print("  [WARN] 未找到嵌入数据占位符，请确认 HTML 中包含 EMBEDDED_DATA")
+        print("  [WARN] 未找到嵌入数据占位符或START_DATE占位符")
         return False
 
     with open(HTML_PATH, 'w', encoding='utf-8') as f:
         f.write(new_html)
     return True
 
+# ---- main ----
 def main():
     print("=" * 60)
-    print("  北交所新股数据更新 v2")
+    print(f"  北交所新股数据更新 v3")
     print(f"  API: {REPORT_NAME}")
+    print(f"  筛选: {START_DATE} 至今（近{LOOKBACK}天）")
     print("=" * 60)
 
-    # 1. 获取数据
+    # 1. Fetch
     print("\n[1/4] 从API获取数据...")
     raw = fetch_all()
-    bse = [d for d in raw if str(d.get("SECURITY_CODE","")).startswith("920")]
-    print(f"  获取到 {len(bse)} 只北交所新股")
+    bse = [d for d in raw if str(d.get("SECURITY_CODE", "")).startswith(CODE_PREFIX)]
+    print(f"  获取到 {len(bse)} 只{CODE_PREFIX}开头新股")
 
     if not bse:
-        print("  [ERROR] 无数据"); sys.exit(1)
+        print("  [ERROR] 无数据")
+        sys.exit(1)
 
-    # 2. 转换
+    # 2. Transform
     print("\n[2/4] 转换格式...")
     df = transform(bse)
     df = df.sort_values("_sort_date", ascending=False)
 
-    # 3. 保存Excel
+    # 3. Save Excel
     print(f"\n[3/4] 保存Excel...")
     save_df = df.drop(columns=["_sort_date"])
     save_df.to_excel(EXCEL_PATH, index=False, engine="openpyxl")
     print(f"  已保存: {EXCEL_PATH}")
 
-    # 4. 更新HTML嵌入数据
+    # 4. Update HTML
     print(f"\n[4/4] 更新HTML嵌入数据...")
     records = build_html_embedded_json(df)
     ok = update_html_embedded(records)
     if ok:
-        print(f"  已更新 {len(records)} 条嵌入数据 → {HTML_PATH}")
+        print(f"  已更新 {len(records)} 条嵌入数据 + 筛选日期 → {HTML_PATH}")
     else:
         print(f"  未能更新HTML，请手动生成")
 
-    # 摘要
+    # Summary
     listed = df[df["涨幅"].notna()]
     unlisted = df[df["涨幅"].isna()]
     print(f"\n{'=' * 60}")
