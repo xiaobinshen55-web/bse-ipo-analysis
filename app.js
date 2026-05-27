@@ -499,30 +499,36 @@
   }
 
   // ============ Bootstrap: cache-first + background refresh ============
-  // Step 1: Render cached data immediately (instant, no loading screen)
   var hasCache = typeof EMBEDDED_DATA !== 'undefined' && EMBEDDED_DATA.length > 0;
 
+  // Step 1: Render cached data immediately (instant, no loading screen)
   if (hasCache) {
     main(EMBEDDED_DATA, 'cached');
   }
 
-  // Step 2: Try API in background, update if successful
-  var bgStart = Date.now();
-  tryFetchAPI(function(err, apiData) {
-    if (!err && apiData && apiData.length > 0) {
-      var elapsed = Date.now() - bgStart;
-      console.log('API refreshed: ' + apiData.length + ' records in ' + elapsed + 'ms');
-      main(apiData, 'live');
-    } else {
-      console.log('API skipped: ' + (err ? err.message : 'no data') + ' (using cached)');
-      // If no cache was available, show error
-      if (!hasCache) {
-        document.getElementById('loading-msg').textContent = '暂无数据，请运行 update_bse_ipo.py 更新离线缓存';
-        document.getElementById('data-status').textContent = '无数据';
-        document.getElementById('data-status').className = 'error';
+  // Step 2: Try API in background with retry
+  function bgFetch(attempt, maxRetries) {
+    var bgStart = Date.now();
+    tryFetchAPI(function(err, apiData) {
+      if (!err && apiData && apiData.length > 0) {
+        var elapsed = Date.now() - bgStart;
+        console.log('API refreshed: ' + apiData.length + ' records in ' + elapsed + 'ms');
+        main(apiData, 'live');
+      } else if (attempt < maxRetries) {
+        var wait = Math.pow(2, attempt) * 1000;
+        console.log('API retry ' + attempt + '/' + maxRetries + ' in ' + wait + 'ms: ' + (err ? err.message : 'nodata'));
+        setTimeout(function() { bgFetch(attempt + 1, maxRetries); }, wait);
+      } else {
+        console.log('API skipped after ' + maxRetries + ' retries (using cached)');
+        if (!hasCache) {
+          document.getElementById('loading-msg').textContent = '暂无数据，请运行 update_bse_ipo.py 更新离线缓存';
+          document.getElementById('data-status').textContent = '无数据';
+          document.getElementById('data-status').className = 'error';
+        }
       }
-    }
-  });
+    });
+  }
+  bgFetch(0, 2);  // up to 2 retries (3 attempts total)
 
   // Always hide loading overlay
   document.getElementById('loading-overlay').classList.add('done');

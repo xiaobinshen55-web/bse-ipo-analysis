@@ -45,29 +45,52 @@ def apply_convert(val, convert):
         return val / 1e4
     return val
 
+# ---- Logging ----
+def log(level, msg):
+    ts = datetime.now().strftime("%H:%M:%S")
+    tags = {"INFO": "", "OK": "✓", "WARN": "⚠", "ERROR": "✗"}
+    prefix = tags.get(level, "")
+    print(f"  [{ts}] {prefix} {msg}")
+
+# ---- Retry helper ----
+def with_retry(fn, fn_name, max_retries=3):
+    """Call fn with exponential backoff on failure."""
+    for attempt in range(1, max_retries + 1):
+        try:
+            result = fn()
+            if attempt > 1:
+                log("OK", f"{fn_name} 第{attempt}次重试成功")
+            return result
+        except Exception as e:
+            if attempt < max_retries:
+                wait = 2 ** attempt
+                log("WARN", f"{fn_name} 失败: {e}，{wait}s后重试({attempt}/{max_retries})")
+                time.sleep(wait)
+            else:
+                log("ERROR", f"{fn_name} 重试{max_retries}次后仍失败: {e}")
+                raise
+
 # ---- API fetch ----
+def _fetch_page(page):
+    params = {
+        "reportName": REPORT_NAME,
+        "columns": "ALL",
+        "pageSize": str(CFG["api"]["pageSize"]),
+        "pageNumber": str(page),
+        "sortColumns": CFG["api"]["sortColumns"],
+        "sortTypes": CFG["api"]["sortTypes"],
+        "source": CFG["api"]["source"],
+        "client": CFG["api"]["client"],
+        "filter": f"(APPLY_DATE>='{START_DATE}')"
+    }
+    r = requests.get(API_URL, params=params, headers=HEADERS, timeout=30)
+    r.raise_for_status()
+    return r.json()
+
 def fetch_all():
     all_data, page = [], 1
-    page_size = CFG["api"]["pageSize"]
-    sort_cols = CFG["api"]["sortColumns"]
-    sort_types = CFG["api"]["sortTypes"]
-    source = CFG["api"]["source"]
-    client = CFG["api"]["client"]
-
     while True:
-        params = {
-            "reportName": REPORT_NAME,
-            "columns": "ALL",
-            "pageSize": str(page_size),
-            "pageNumber": str(page),
-            "sortColumns": sort_cols,
-            "sortTypes": sort_types,
-            "source": source,
-            "client": client,
-            "filter": f"(APPLY_DATE>='{START_DATE}')"
-        }
-        r = requests.get(API_URL, params=params, headers=HEADERS, timeout=30)
-        data = r.json()
+        data = with_retry(lambda p=page: _fetch_page(p), f"API分页{page}")
         if not data.get("success"):
             break
         result = data["result"]
@@ -210,49 +233,60 @@ def update_html_embedded(records):
 
 # ---- main ----
 def main():
+    t_start = datetime.now()
     print("=" * 60)
     print(f"  北交所新股数据更新 v3")
-    print(f"  API: {REPORT_NAME}")
-    print(f"  筛选: {START_DATE} 至今（近{LOOKBACK}天）")
+    print(f"  API: {REPORT_NAME}  |  筛选: {START_DATE} 至今（近{LOOKBACK}天）")
+    print(f"  开始: {t_start.strftime('%Y-%m-%d %H:%M:%S')}")
     print("=" * 60)
 
     # 1. Fetch
-    print("\n[1/4] 从API获取数据...")
-    raw = fetch_all()
+    log("INFO", "[1/4] 从API获取数据...")
+    try:
+        raw = with_retry(fetch_all, "API全量获取")
+    except Exception as e:
+        log("ERROR", f"数据获取失败: {e}")
+        sys.exit(1)
+
     bse = [d for d in raw if str(d.get("SECURITY_CODE", "")).startswith(CODE_PREFIX)]
-    print(f"  获取到 {len(bse)} 只{CODE_PREFIX}开头新股")
+    log("OK" if bse else "WARN", f"获取到 {len(bse)} 只{CODE_PREFIX}开头新股")
 
     if not bse:
-        print("  [ERROR] 无数据")
+        log("ERROR", "无有效数据，退出")
         sys.exit(1)
 
     # 2. Transform
-    print("\n[2/4] 转换格式...")
+    log("INFO", "[2/4] 转换格式...")
     df = transform(bse)
     df = df.sort_values("_sort_date", ascending=False)
+    log("OK", f"转换完成，{len(df)} 条记录")
 
     # 3. Save Excel
-    print(f"\n[3/4] 保存Excel...")
-    save_df = df.drop(columns=["_sort_date"])
-    save_df.to_excel(EXCEL_PATH, index=False, engine="openpyxl")
-    print(f"  已保存: {EXCEL_PATH}")
+    log("INFO", "[3/4] 保存Excel...")
+    try:
+        save_df = df.drop(columns=["_sort_date"])
+        save_df.to_excel(EXCEL_PATH, index=False, engine="openpyxl")
+        log("OK", f"已保存: {os.path.basename(EXCEL_PATH)}")
+    except Exception as e:
+        log("ERROR", f"保存Excel失败: {e}")
 
     # 4. Update HTML
-    print(f"\n[4/4] 更新HTML嵌入数据...")
+    log("INFO", "[4/4] 更新HTML嵌入数据...")
     records = build_html_embedded_json(df)
     ok = update_html_embedded(records)
     if ok:
-        print(f"  已更新 {len(records)} 条嵌入数据 + 筛选日期 → {HTML_PATH}")
+        log("OK", f"已更新 {len(records)} 条嵌入数据 + 筛选日期 → {os.path.basename(HTML_PATH)}")
     else:
-        print(f"  未能更新HTML，请手动生成")
+        log("ERROR", "未能更新HTML，请检查占位符是否存在")
 
     # Summary
     listed = df[df["涨幅"].notna()]
     unlisted = df[df["涨幅"].isna()]
+    elapsed = (datetime.now() - t_start).total_seconds()
     print(f"\n{'=' * 60}")
-    print(f"  总计: {len(df)} 只")
-    print(f"  已上市: {len(listed)} 只, 待上市: {len(unlisted)} 只")
+    print(f"  总计: {len(df)} 只  |  已上市: {len(listed)} 只  |  待上市: {len(unlisted)} 只")
     print(f"  日期: {df['申购日'].iloc[-1]} ~ {df['申购日'].iloc[0]}")
+    print(f"  耗时: {elapsed:.1f}s")
     print(f"{'=' * 60}")
 
 if __name__ == "__main__":
