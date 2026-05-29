@@ -21,8 +21,9 @@
 
   // ============ Section 1: Upcoming IPOs ============
   function renderUpcoming(stats) {
-    var grid = document.getElementById('upcoming-grid');
     var empty = document.getElementById('upcoming-empty');
+    var pendingSection = document.getElementById('upcoming-pending-section');
+    var subscribedSection = document.getElementById('upcoming-subscribed-section');
 
     // Unlisted = gain_pct == null, sorted by apply_date desc
     var upcoming = stats.unlisted.slice().sort(function(a, b) {
@@ -30,24 +31,39 @@
     });
 
     if (upcoming.length === 0) {
-      grid.innerHTML = '';
+      pendingSection.style.display = 'none';
+      subscribedSection.style.display = 'none';
       empty.style.display = 'block';
       return;
     }
     empty.style.display = 'none';
 
+    // Split: 未申购 (no win_rate) vs 已申购待上市 (has win_rate)
+    var pending = upcoming.filter(function(d) { return d.win_rate == null; });
+    var subscribed = upcoming.filter(function(d) { return d.win_rate != null; });
+
     var wdays = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
 
-    var html = '';
-    upcoming.forEach(function(d) {
+    function buildCard(d) {
       var dateStr = d.apply_date || '';
       var wday = '';
       if (dateStr) {
         var dt = new Date(dateStr + 'T00:00:00');
         wday = wdays[dt.getDay()];
       }
-      // Determine card style: pending (no win_rate data yet = truly upcoming) vs. subscribed
       var cardClass = d.win_rate == null ? 'pending' : '';
+      var statusLabel = d.win_rate != null ? '已申购' : '待申购';
+      var statusColor = d.win_rate != null ? '#10a050' : '#f59e0b';
+
+      // Extra subscription metrics for subscribed stocks
+      var extraMetrics = '';
+      if (d.win_rate != null) {
+        var wr = d.win_rate ? (d.win_rate * 10000).toFixed(1) : '-';
+        var fy = d.fund_yi ? d.fund_yi.toFixed(0) : '-';
+        extraMetrics =
+          '<div class="uc-metric"><span class="label">中签率（万分之）</span><span class="val">' + wr + '</span></div>' +
+          '<div class="uc-metric"><span class="label">冻结资金</span><span class="val">' + fy + ' 亿</span></div>';
+      }
 
       var discount = '';
       if (d.pe && d.ind_pe && d.ind_pe > 0) {
@@ -55,7 +71,7 @@
         discount = '<div class="uc-discount">估值折价 <strong>' + discPct + '%</strong><span>发行PE仅为行业' + (d.pe / d.ind_pe * 100).toFixed(0) + '%</span></div>';
       }
 
-      html += '<div class="upcoming-card ' + cardClass + '">' +
+      return '<div class="upcoming-card ' + cardClass + '">' +
         '<div class="uc-header">' +
           '<div>' +
             '<div class="uc-name">' + d.name + '</div>' +
@@ -67,13 +83,30 @@
           '<div class="uc-metric"><span class="label">发行价格</span><span class="val">' + (d.price ? d.price.toFixed(2) : '-') + ' 元</span></div>' +
           '<div class="uc-metric"><span class="label">发行市盈率</span><span class="val">' + (d.pe ? d.pe.toFixed(2) : '-') + ' 倍</span></div>' +
           '<div class="uc-metric"><span class="label">行业市盈率</span><span class="val">' + (d.ind_pe ? d.ind_pe.toFixed(2) : '-') + ' 倍</span></div>' +
-          '<div class="uc-metric"><span class="label">申购状态</span><span class="val" style="color:' + (d.win_rate != null ? '#10a050' : '#f59e0b') + '">' + (d.win_rate != null ? '已申购' : '待申购') + '</span></div>' +
+          '<div class="uc-metric"><span class="label">申购状态</span><span class="val" style="color:' + statusColor + '">' + statusLabel + '</span></div>' +
+          extraMetrics +
         '</div>' +
         discount +
       '</div>';
-    });
+    }
 
-    grid.innerHTML = html;
+    // Row 1: 待申购
+    if (pending.length > 0) {
+      pendingSection.style.display = '';
+      document.getElementById('pending-count').textContent = '(' + pending.length + '只)';
+      document.getElementById('upcoming-pending').innerHTML = pending.map(buildCard).join('');
+    } else {
+      pendingSection.style.display = 'none';
+    }
+
+    // Row 2: 已申购待上市
+    if (subscribed.length > 0) {
+      subscribedSection.style.display = '';
+      document.getElementById('subscribed-count').textContent = '(' + subscribed.length + '只)';
+      document.getElementById('upcoming-subscribed').innerHTML = subscribed.map(buildCard).join('');
+    } else {
+      subscribedSection.style.display = 'none';
+    }
   }
 
   // ============ Section 2: Stat Cards ============
