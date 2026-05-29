@@ -35,6 +35,6 @@
   },
   "paths": {
     "excel": "北交所新股情况.xlsx",
-    "html": "../index.html"
+    "html": ["../index.html", "../optimized.html"]
   }
 }

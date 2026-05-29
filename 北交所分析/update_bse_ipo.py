@@ -27,7 +27,7 @@ CODE_PREFIX = CFG["filter"]["codePrefix"]
 START_DATE = (datetime.now() - timedelta(days=LOOKBACK)).strftime("%Y-%m-%d")
 
 EXCEL_PATH = os.path.join(SCRIPT_DIR, CFG["paths"]["excel"])
-HTML_PATH = os.path.join(SCRIPT_DIR, CFG["paths"]["html"])
+HTML_PATHS = [os.path.join(SCRIPT_DIR, p) for p in CFG["paths"]["html"]]
 
 HEADERS = {"User-Agent": "Mozilla/5.0", "Referer": "https://data.eastmoney.com/xg/xg/"}
 
@@ -203,12 +203,12 @@ def build_html_embedded_json(df):
         })
     return records
 
-def update_html_embedded(records):
+def update_html_embedded(records, html_path):
     try:
-        with open(HTML_PATH, 'r', encoding='utf-8') as f:
+        with open(html_path, 'r', encoding='utf-8') as f:
             html = f.read()
     except FileNotFoundError:
-        print(f"  HTML 文件不存在: {HTML_PATH}，跳过嵌入数据更新")
+        print(f"  HTML 文件不存在: {html_path}，跳过嵌入数据更新")
         return False
 
     json_str = json.dumps(records, ensure_ascii=False, indent=2)
@@ -273,11 +273,14 @@ def main():
     # 4. Update HTML
     log("INFO", "[4/4] 更新HTML嵌入数据...")
     records = build_html_embedded_json(df)
-    ok = update_html_embedded(records)
-    if ok:
-        log("OK", f"已更新 {len(records)} 条嵌入数据 + 筛选日期 → {os.path.basename(HTML_PATH)}")
-    else:
-        log("ERROR", "未能更新HTML，请检查占位符是否存在")
+    updated_count = 0
+    for html_path in HTML_PATHS:
+        ok = update_html_embedded(records, html_path)
+        if ok:
+            updated_count += 1
+            log("OK", f"已更新 {len(records)} 条嵌入数据 + 筛选日期 -> {os.path.basename(html_path)}")
+        else:
+            log("ERROR", f"未能更新 {os.path.basename(html_path)}，请检查占位符是否存在")
 
     # Summary
     listed = df[df["涨幅"].notna()]

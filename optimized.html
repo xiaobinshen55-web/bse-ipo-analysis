@@ -3,35 +3,200 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>北交所打新投资策略分析报告</title>
-<link rel="stylesheet" href="styles.css">
+<title>北交所打新 · 投资分析</title>
+<link rel="stylesheet" href="css/optimized.css">
 </head>
 <body>
 
 <div id="loading-overlay">
   <div class="spinner"></div>
-  <div id="loading-msg">正在从东方财富获取最新数据...</div>
+  <div id="loading-msg">正在获取最新数据...</div>
 </div>
 
-<div class="hero">
-  <h1>北交所打新投资策略分析报告</h1>
-  <div class="subtitle">低风险套利机会深度研究 —— 数据驱动，理性决策 <span id="data-status">加载中...</span></div>
-  <div class="date-badge" id="hero-date-range">统计区间：加载中...</div>
-</div>
+<!-- ===== Hero ===== -->
+<header class="hero">
+  <div class="hero-badge">BSE IPO ANALYSIS</div>
+  <h1>北交所打新 · 投资策略分析</h1>
+  <p class="hero-sub">低风险套利机会深度研究，数据驱动理性决策</p>
+  <div class="hero-meta">
+    <span id="hero-date-range">统计区间：加载中...</span>
+    <span class="dot"></span>
+    <span id="data-status">加载中...</span>
+  </div>
+</header>
 
 <div class="container">
 
-<div class="section" id="sec-rules">
-  <div class="section-title"><span class="icon">&#9432;</span> 一、什么是北交所打新？</div>
-  <div class="section-desc">北交所（北京证券交易所）新股申购机制与其他板块不同，理解规则是参与的前提。</div>
-  <div class="rule-flow">
-    <div class="rule-step"><div class="step-num">1</div><h4>开通权限</h4><p>证券账户资产日均不低于50万元，具备2年以上证券交易经验</p></div>
-    <div class="rule-step"><div class="step-num">2</div><h4>现金申购</h4><p>全额缴付申购资金，申购日冻结，T+2或T+3解冻</p></div>
-    <div class="rule-step"><div class="step-num">3</div><h4>比例配售</h4><p>当申购总量＞发行量时，按比例配售；申购资金越大，获配越多</p></div>
-    <div class="rule-step"><div class="step-num">4</div><h4>上市交易</h4><p>中签后约1-2周上市，首日无涨跌幅限制，T+1交易</p></div>
+<!-- ===== 一、即将申购新股 ===== -->
+<section class="section" id="sec-upcoming">
+  <div class="section-head">
+    <span class="section-num">01</span>
+    <div>
+      <h2>新股申购前瞻</h2>
+      <p class="section-sub">即将开放申购的北交所新股，提前了解基本面，把握申购窗口</p>
+    </div>
   </div>
-  <div class="card"><h3>核心规则要点</h3>
-    <table><thead><tr><th style="text-align:left">项目</th><th style="text-align:left">规则说明</th></tr></thead><tbody>
+  <div class="upcoming-grid" id="upcoming-grid"></div>
+  <div class="upcoming-empty" id="upcoming-empty" style="display:none">暂无即将申购的新股数据</div>
+</section>
+
+<!-- ===== 二、核心数据概览 ===== -->
+<section class="section" id="sec-overview">
+  <div class="section-head">
+    <span class="section-num">02</span>
+    <div>
+      <h2>核心数据概览</h2>
+      <p class="section-sub" id="overview-desc">加载中...</p>
+    </div>
+  </div>
+  <div class="stat-grid" id="stat-grid"></div>
+</section>
+
+<!-- ===== 三、收益深度分析 ===== -->
+<section class="section" id="sec-gain">
+  <div class="section-head">
+    <span class="section-num">03</span>
+    <div>
+      <h2>收益深度分析</h2>
+      <p class="section-sub">首日涨幅分布、每百股获利排名、及上市后长期持有表现</p>
+    </div>
+  </div>
+  <div class="two-col">
+    <div class="card"><h3>首日涨幅分布</h3><div class="chart-wrap" id="chart-gain-dist"></div></div>
+    <div class="card"><h3>发行价格分布</h3><div class="chart-wrap" id="chart-price-dist"></div></div>
+  </div>
+  <div class="card"><h3>首日收益 TOP 10（按每百股获利排序）</h3><div class="table-scroll"><table><thead><tr><th>排名</th><th>股票名称</th><th>发行价(元)</th><th>发行PE</th><th>首日均价(元)</th><th>首日涨幅</th><th>百股获利(元)</th><th>年化收益</th></tr></thead><tbody id="tbody-top-gainers"></tbody></table></div></div>
+  <div class="card"><h3>长期持有收益 TOP 8（最新价 vs 发行价累计涨幅）</h3><div class="chart-wrap" id="chart-cum-gain"></div></div>
+</section>
+
+<!-- ===== 四、月度趋势 ===== -->
+<section class="section" id="sec-monthly">
+  <div class="section-head">
+    <span class="section-num">04</span>
+    <div>
+      <h2>月度趋势与市场热度</h2>
+      <p class="section-sub">追踪发行节奏、资金热度、首日收益的变化趋势</p>
+    </div>
+  </div>
+  <div class="two-col">
+    <div class="card"><h3>月度发行数量与冻结资金</h3><div class="chart-wrap" id="chart-monthly-ipo"></div></div>
+    <div class="card"><h3>首日平均涨幅及百股获利趋势</h3><div class="chart-wrap" id="chart-monthly-gain"></div></div>
+  </div>
+  <div class="card"><h3>月度关键指标一览</h3><div class="table-scroll"><table><thead><tr><th>月份</th><th>发行数</th><th>均价(元)</th><th>中签率(万分之)</th><th>冻资(亿)</th><th>首日涨幅</th><th>百股获利(元)</th></tr></thead><tbody id="tbody-monthly"></tbody></table></div></div>
+</section>
+
+<!-- ===== 五、风险与策略 ===== -->
+<section class="section" id="sec-risk-strategy">
+  <div class="section-head">
+    <span class="section-num">05</span>
+    <div>
+      <h2>风险评估与投资策略</h2>
+      <p class="section-sub">理性看待北交所打新，优势显著但门槛和风险也不容忽视</p>
+    </div>
+  </div>
+
+  <div class="risk-grid">
+    <div class="risk-card pro">
+      <div class="risk-label">优势</div>
+      <ul>
+        <li>零破发记录，统计期内胜率100%</li>
+        <li>发行PE仅为行业PE的~40%，估值安全垫极厚</li>
+        <li>每百股平均获利可观，最低也有正收益</li>
+        <li>资金周转快，冻结仅2-3天</li>
+        <li>纯比例配售，无摇号运气成分</li>
+        <li>长期持有累计涨幅远超首日收益</li>
+      </ul>
+    </div>
+    <div class="risk-card con">
+      <div class="risk-label">劣势与风险</div>
+      <ul>
+        <li>资金门槛高，小资金中签概率极低</li>
+        <li>平均中签率万分之3左右，资金效率不高</li>
+        <li>冻结资金持续走高，收益空间收窄</li>
+        <li>北交所整体流动性弱于沪深</li>
+        <li>发行节奏、定价规则可能调整</li>
+        <li>大额资金冻结期间错过其他投资机会</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="strategy-box">
+    <div class="strategy-main">
+      <h3>推荐策略：大资金稳健型打新套利</h3>
+      <p>适合可投资金充裕的稳健型投资者，通过持续参与北交所新股申购获取确定性收益</p>
+    </div>
+    <div class="strategy-grid">
+      <div class="strategy-col">
+        <h4>操作建议</h4>
+        <dl>
+          <dt>资金规模</dt><dd>以"稳获百股所需资金"为基准参与</dd>
+          <dt>卖出策略</dt><dd>首日开盘后择机卖出，锁定确定性收益</dd>
+          <dt>参与频率</dt><dd>每只都参与，机会充足</dd>
+          <dt>资金安排</dt><dd>预留滚动资金，避免错过连续发行窗口</dd>
+          <dt>选股偏好</dt><dd>低价+低PE组合安全垫更厚</dd>
+        </dl>
+      </div>
+      <div class="strategy-col">
+        <h4>进阶策略</h4>
+        <dl>
+          <dt>首日+持有</dt><dd>优质标的上市后继续持有</dd>
+          <dt>多账户操作</dt><dd>家庭多账户分散申购，提高总获配量</dd>
+          <dt>资金最大化</dt><dd>顶格申购，最大化绝对收益</dd>
+          <dt>关注低热度标的</dt><dd>冷门股中签率更高，收益未必差</dd>
+        </dl>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 六、完整数据附表 ===== -->
+<section class="section" id="sec-table">
+  <div class="section-head">
+    <span class="section-num">06</span>
+    <div>
+      <h2>完整数据附表</h2>
+      <p class="section-sub" id="table-desc">加载中...</p>
+    </div>
+  </div>
+  <div class="card"><div class="table-scroll"><table id="table-all-stocks"><thead><tr>
+    <th>代码</th><th>简称</th><th>申购日</th><th>发行价</th><th>发行PE</th><th>行业PE</th><th>中签率&permil;</th><th>稳获百股(万)</th><th>首日涨幅</th><th>百股获利</th><th>累计涨幅</th>
+  </tr></thead><tbody id="tbody-all-stocks"></tbody></table></div></div>
+</section>
+
+<!-- ===== 七、北交所打新介绍（原第一部分） ===== -->
+<section class="section" id="sec-intro">
+  <div class="section-head">
+    <span class="section-num">07</span>
+    <div>
+      <h2>北交所打新介绍</h2>
+      <p class="section-sub">了解北交所新股申购机制，掌握参与的基本规则</p>
+    </div>
+  </div>
+  <div class="rule-flow">
+    <div class="rule-step">
+      <div class="step-icon">1</div>
+      <h4>开通权限</h4>
+      <p>证券账户资产日均不低于50万元，具备2年以上证券交易经验</p>
+    </div>
+    <div class="rule-step">
+      <div class="step-icon">2</div>
+      <h4>现金申购</h4>
+      <p>全额缴付申购资金，申购日冻结，T+2或T+3解冻</p>
+    </div>
+    <div class="rule-step">
+      <div class="step-icon">3</div>
+      <h4>比例配售</h4>
+      <p>当申购总量＞发行量时按比例配售，申购资金越大获配越多</p>
+    </div>
+    <div class="rule-step">
+      <div class="step-icon">4</div>
+      <h4>上市交易</h4>
+      <p>中签后约1-2周上市，首日无涨跌幅限制，T+1交易</p>
+    </div>
+  </div>
+  <div class="card" style="margin-top:24px">
+    <h3>核心规则要点</h3>
+    <table><thead><tr><th>项目</th><th>规则说明</th></tr></thead><tbody>
       <tr><td>申购方式</td><td>全额现金预缴，按比例配售（不同于沪深市值配售）</td></tr>
       <tr><td>资金占用</td><td>申购日冻结，通常T+2/T+3解冻</td></tr>
       <tr><td>中签机制</td><td>无摇号，纯按资金量比例分配，大资金优势明显</td></tr>
@@ -39,94 +204,16 @@
       <tr><td>首日交易</td><td>无涨跌幅限制，波动较大，但统计期内零破发</td></tr>
     </tbody></table>
   </div>
+</section>
+
 </div>
 
-<div class="section" id="sec-overview">
-  <div class="section-title"><span class="icon">&#9733;</span> 二、核心数据概览</div>
-  <div class="section-desc" id="overview-desc">加载中...</div>
-  <div class="stat-grid" id="stat-grid"></div>
-</div>
-
-<div class="section" id="sec-gain">
-  <div class="section-title"><span class="icon">&#9733;</span> 三、收益深度分析</div>
-  <div class="section-desc">首日涨幅分布、每百股获利排名、以及上市后长期持有表现。</div>
-  <div class="two-col">
-    <div class="card"><h3>首日涨幅分布</h3><div class="chart-wrap" id="chart-gain-dist"></div></div>
-    <div class="card"><h3>发行价格分布</h3><div class="chart-wrap" id="chart-price-dist"></div></div>
-  </div>
-  <div class="card"><h3>首日收益TOP 10（按每百股获利排序）</h3><div class="table-scroll"><table><thead><tr><th style="text-align:left">排名</th><th style="text-align:left">股票名称</th><th>发行价(元)</th><th>发行PE</th><th>首日均价(元)</th><th>首日涨幅</th><th>百股获利(元)</th><th>年化收益</th></tr></thead><tbody id="tbody-top-gainers"></tbody></table></div></div>
-  <div class="card"><h3>长期持有收益TOP 8（最新价 vs 发行价累计涨幅）</h3><div class="chart-wrap" id="chart-cum-gain"></div></div>
-</div>
-
-<div class="section" id="sec-monthly">
-  <div class="section-title"><span class="icon">&#9783;</span> 四、月度趋势与市场热度</div>
-  <div class="section-desc">追踪发行节奏、资金热度、首日收益的变化趋势。</div>
-  <div class="two-col">
-    <div class="card"><h3>月度发行数量与冻结资金</h3><div class="chart-wrap" id="chart-monthly-ipo"></div></div>
-    <div class="card"><h3>首日平均涨幅及百股获利趋势</h3><div class="chart-wrap" id="chart-monthly-gain"></div></div>
-  </div>
-  <div class="card"><h3>月度关键指标一览</h3><div class="table-scroll"><table><thead><tr><th style="text-align:left">月份</th><th>发行数</th><th>均价(元)</th><th>中签率(万分之)</th><th>冻资(亿)</th><th>首日涨幅</th><th>百股获利(元)</th></tr></thead><tbody id="tbody-monthly"></tbody></table></div></div>
-</div>
-
-<div class="section" id="sec-risk">
-  <div class="section-title"><span class="icon">&#9888;</span> 五、优劣势与风险评估</div>
-  <div class="section-desc">理性看待北交所打新，优势显著但门槛和风险也不容忽视。</div>
-  <div class="adv-grid">
-    <div class="adv-card pro"><h4>优势</h4><ul>
-      <li><strong>零破发记录：</strong>统计期内已上市新股首日全部上涨，胜率100%，下有保底</li>
-      <li><strong>发行折价显著：</strong>发行PE仅为行业PE的~40%，估值安全垫极厚</li>
-      <li><strong>收益确定性高：</strong>每百股平均获利可观，最低也有正收益</li>
-      <li><strong>资金周转快：</strong>冻结仅2-3天，年化周转50次+</li>
-      <li><strong>规则透明：</strong>纯比例配售，无摇号运气成分</li>
-      <li><strong>长期持有更优：</strong>持有至今平均累计涨幅远超首日收益</li>
-    </ul></div>
-    <div class="adv-card con"><h4>劣势与风险</h4><ul>
-      <li><strong>资金门槛高：</strong>稳获100股需大资金，小资金中签概率极低</li>
-      <li><strong>中签率极低：</strong>平均万分之3左右，资金效率不高</li>
-      <li><strong>竞争加剧：</strong>冻结资金持续走高，收益空间收窄</li>
-      <li><strong>流动性风险：</strong>北交所整体流动性弱于沪深</li>
-      <li><strong>政策风险：</strong>发行节奏、定价规则可能调整</li>
-      <li><strong>机会成本：</strong>大额资金冻结期间错过其他投资机会</li>
-    </ul></div>
-  </div>
-</div>
-
-<div class="section" id="sec-strategy">
-  <div class="section-title"><span class="icon">&#9998;</span> 六、投资策略建议</div>
-  <div class="strategy-banner"><h3>推荐策略：大资金稳健型打新套利</h3><p>适合可投资金充裕的稳健型投资者，通过持续参与北交所新股申购获取确定性收益。</p></div>
-  <div class="two-col">
-    <div class="card"><h3>操作建议</h3><table><thead><tr><th style="text-align:left">要点</th><th style="text-align:left">建议</th></tr></thead><tbody>
-      <tr><td>资金规模</td><td>以"稳获百股所需资金"为基准参与</td></tr>
-      <tr><td>卖出策略</td><td>首日开盘后择机卖出，锁定确定性收益</td></tr>
-      <tr><td>参与频率</td><td>每只都参与，机会充足</td></tr>
-      <tr><td>资金安排</td><td>预留滚动资金，避免错过连续发行窗口</td></tr>
-      <tr><td>选股偏好</td><td>低价+低PE组合安全垫更厚</td></tr>
-    </tbody></table></div>
-    <div class="card"><h3>进阶策略</h3><table><thead><tr><th style="text-align:left">策略</th><th style="text-align:left">说明</th></tr></thead><tbody>
-      <tr><td>首日+持有</td><td>优质标的上市后继续持有</td></tr>
-      <tr><td>多账户操作</td><td>家庭多账户分散申购，提高总获配量</td></tr>
-      <tr><td>资金最大化</td><td>顶格申购，最大化绝对收益</td></tr>
-      <tr><td>关注低热度标的</td><td>冷门股中签率更高，收益未必差</td></tr>
-    </tbody></table></div>
-  </div>
-</div>
-
-<div class="section" id="sec-table">
-  <div class="section-title"><span class="icon">&#9776;</span> 七、完整数据附表</div>
-  <div class="section-desc" id="table-desc">加载中...</div>
-  <div class="card"><div class="table-scroll"><table id="table-all-stocks" style="font-size:.82em"><thead><tr>
-    <th style="text-align:left">代码</th><th style="text-align:left">简称</th><th style="text-align:left">申购日</th><th>发行价</th><th>发行PE</th><th>行业PE</th><th>中签率‱</th><th>稳获百股(万)</th><th>首日涨幅</th><th>百股获利</th><th>累计涨幅</th>
-  </tr></thead><tbody id="tbody-all-stocks"></tbody></table></div></div>
-</div>
-
-<div class="footer">
+<footer class="footer">
   <p id="footer-info">数据来源：东方财富数据中心 | 自动更新</p>
   <p class="disclaimer">免责声明：本报告仅供参考，不构成投资建议。过往业绩不代表未来表现。投资有风险，入市需谨慎。</p>
-</div>
+</footer>
 
-</div>
-
-<!-- ===== Embedded data (offline fallback) ===== -->
+<!-- ===== Embedded Data (offline fallback) ===== -->
 <script>
 const API_START_DATE = "2025-11-23";
 const EMBEDDED_DATA = [
@@ -1035,7 +1122,7 @@ const EMBEDDED_DATA = [
 
 <!-- ===== Shared Data Layer ===== -->
 <script src="js/bse-data.js"></script>
-<!-- ===== Main Application ===== -->
-<script src="app.js"></script>
+<!-- ===== Optimized Application ===== -->
+<script src="js/optimized-app.js"></script>
 </body>
 </html>
