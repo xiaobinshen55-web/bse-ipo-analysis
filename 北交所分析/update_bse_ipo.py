@@ -227,7 +227,7 @@ def update_html_embedded(records, html_path):
         print("  [WARN] 未找到嵌入数据占位符或START_DATE占位符")
         return False
 
-    with open(HTML_PATH, 'w', encoding='utf-8') as f:
+    with open(html_path, 'w', encoding='utf-8') as f:
         f.write(new_html)
     return True
 
@@ -282,27 +282,11 @@ def main():
         else:
             log("ERROR", f"未能更新 {os.path.basename(html_path)}，请检查占位符是否存在")
 
-    # 5. Git commit & push (CI only)
+    # 5. Git commit & push — handled by stefanzweifel/git-auto-commit-action in CI workflow
     if os.environ.get("CI") or os.environ.get("GITHUB_ACTIONS"):
-        log("INFO", "[5/5] 提交数据至Git...")
-        import subprocess
-        repo_root = os.path.dirname(SCRIPT_DIR)
-        html_rel = [os.path.relpath(p, repo_root) for p in HTML_PATHS]
-        try:
-            subprocess.run(["git", "-C", repo_root, "config", "user.name", "github-actions"], check=True)
-            subprocess.run(["git", "-C", repo_root, "config", "user.email", "actions@github.com"], check=True)
-            subprocess.run(["git", "-C", repo_root, "add"] + html_rel, check=True)
-            result = subprocess.run(["git", "-C", repo_root, "diff", "--staged", "--quiet"], capture_output=True)
-            if result.returncode != 0:
-                subprocess.run(["git", "-C", repo_root, "commit", "-m", "auto: update BSE IPO embedded data"], check=True)
-                subprocess.run(["git", "-C", repo_root, "push"], check=True)
-                log("OK", f"已提交并推送: {', '.join(html_rel)}")
-            else:
-                log("INFO", "无数据变更，跳过提交")
-        except subprocess.CalledProcessError as e:
-            log("ERROR", f"Git提交失败: {e}")
+        log("INFO", "[5/5] HTML文件已更新，由 git-auto-commit-action 负责提交推送")
     else:
-        log("INFO", "[5/5] 本地运行，跳过Git提交")
+        log("INFO", "[5/5] 本地运行，HTML已更新。请手动 git add && git commit && git push 发布")
 
     # Summary
     listed = df[df["涨幅"].notna()]
