@@ -76,10 +76,9 @@
 
         // 预测稳获百股门槛（四因子模型）
         if (d.predicted_funds) {
-          var pf = d.predicted_funds;
           pendingMetrics +=
             '<div class="uc-metric"><span class="label">预测稳获百股门槛</span>' +
-            '<span class="val" title="保守/中性/偏热">' + pf.conservative + ' / <strong>' + pf.neutral + '</strong> / ' + pf.optimistic + ' 万</span></div>';
+            '<span class="val">' + d.predicted_funds.neutral + ' 万</span></div>';
         } else {
           pendingMetrics += '<div class="uc-metric"><span class="label">预测稳获百股门槛</span><span class="val">数据不足</span></div>';
         }
