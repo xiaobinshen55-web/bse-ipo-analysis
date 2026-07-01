@@ -38,9 +38,10 @@
     }
     empty.style.display = 'none';
 
-    // Split: 未申购 (no win_rate) vs 已申购待上市 (has win_rate)
-    var pending = upcoming.filter(function(d) { return d.win_rate == null; });
-    var subscribed = upcoming.filter(function(d) { return d.win_rate != null; });
+    // Split: 待申购 (apply_date >= today) vs 已申购待上市 (apply_date < today)
+    var todayStr = new Date().toISOString().split('T')[0];
+    var pending = upcoming.filter(function(d) { return d.apply_date >= todayStr; });
+    var subscribed = upcoming.filter(function(d) { return d.apply_date < todayStr; });
 
     var wdays = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
 
@@ -51,9 +52,10 @@
         var dt = new Date(dateStr + 'T00:00:00');
         wday = wdays[dt.getDay()];
       }
-      var cardClass = d.win_rate == null ? 'pending' : '';
-      var statusLabel = d.win_rate != null ? '已申购' : '待申购';
-      var statusColor = d.win_rate != null ? '#10a050' : '#f59e0b';
+      var isPending = d.apply_date >= todayStr;
+      var cardClass = isPending ? 'pending' : '';
+      var statusLabel = isPending ? '待申购' : '已申购';
+      var statusColor = isPending ? '#f59e0b' : '#10a050';
 
       // Extra subscription metrics for subscribed stocks
       var extraMetrics = '';
