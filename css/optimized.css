@@ -205,6 +205,9 @@ body {
   font-weight: 600;
   color: var(--c-text);
 }
+.upcoming-card .uc-metric-full {
+  grid-column: 1 / -1;
+}
 .upcoming-card .uc-discount {
   margin-top: 14px;
   padding-top: 12px;

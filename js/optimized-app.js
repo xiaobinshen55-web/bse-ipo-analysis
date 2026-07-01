@@ -67,6 +67,30 @@
           '<div class="uc-metric"><span class="label">冻结资金</span><span class="val">' + fy + ' 亿</span></div>';
       }
 
+      // Prediction metrics for pending stocks
+      var pendingMetrics = '';
+      if (isPending) {
+        // 顶格申购资金
+        var maxAmt = d.max_sub_amt ? d.max_sub_amt.toFixed(0) + ' 万' : '-';
+        pendingMetrics += '<div class="uc-metric"><span class="label">顶格申购资金</span><span class="val">' + maxAmt + '</span></div>';
+
+        // 预测稳获百股门槛（四因子模型）
+        if (d.predicted_funds) {
+          var pf = d.predicted_funds;
+          pendingMetrics +=
+            '<div class="uc-metric"><span class="label">预测稳获百股门槛</span>' +
+            '<span class="val" title="保守/中性/偏热">' + pf.conservative + ' / <strong>' + pf.neutral + '</strong> / ' + pf.optimistic + ' 万</span></div>';
+        } else {
+          pendingMetrics += '<div class="uc-metric"><span class="label">预测稳获百股门槛</span><span class="val">数据不足</span></div>';
+        }
+
+        // 四因子拆解（小字标注）
+        var priceWayLabel = d.price_way || '未知';
+        pendingMetrics +=
+          '<div class="uc-metric uc-metric-full"><span class="label">模型参数</span>' +
+          '<span class="val" style="font-size:0.75rem;color:#6b7280;">发行价' + (d.price ? d.price.toFixed(1) : '?') + '元 | PE ' + (d.pe ? d.pe.toFixed(1) : '?') + '倍 | ' + priceWayLabel + '</span></div>';
+      }
+
       var discount = '';
       if (d.pe && d.ind_pe && d.ind_pe > 0) {
         var discPct = ((1 - d.pe / d.ind_pe) * 100).toFixed(0);
@@ -87,6 +111,7 @@
           '<div class="uc-metric"><span class="label">行业市盈率</span><span class="val">' + (d.ind_pe ? d.ind_pe.toFixed(2) : '-') + ' 倍</span></div>' +
           '<div class="uc-metric"><span class="label">申购状态</span><span class="val" style="color:' + statusColor + '">' + statusLabel + '</span></div>' +
           extraMetrics +
+          pendingMetrics +
         '</div>' +
         discount +
       '</div>';

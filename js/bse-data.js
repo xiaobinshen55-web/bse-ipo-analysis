@@ -12,6 +12,49 @@ var BSE = (function() {
   var API_URL = 'https://datacenter.eastmoney.com/api/data/v1/get';
   var REPORT_NAME = 'RPT_NEEQ_ISSUEINFO_LIST';
 
+  // ============ 四因子预测模型 ============
+  // 根据发行参数估算「总申购资金A」和「稳获百股门槛」
+  function predictFundsNeeded(d) {
+    // d needs: price, pe, ind_pe, online_issue_num, price_way
+    var Q = d.online_issue_num; // 网上发行量（万股）
+    if (!Q || Q <= 0) return null;
+
+    // 因子A: 发行价
+    var priceAdj = 0;
+    if (d.price != null) {
+      if (d.price < 10) priceAdj = 1000;
+      else if (d.price > 25) priceAdj = -1000;
+    }
+
+    // 因子B: PE估值
+    var peAdj = 0;
+    if (d.pe != null) {
+      if (d.pe > 40) peAdj = -2000;
+      else if (d.pe > 25) peAdj = -1000;
+    }
+
+    // 因子C: 行业热度（用行业PE近似）
+    var indAdj = 0;
+    if (d.ind_pe != null) {
+      if (d.ind_pe > 50) indAdj = 1000;       // 高行业PE ≈ 热门赛道
+      else if (d.ind_pe < 20) indAdj = -500;   // 低行业PE ≈ 传统行业
+    }
+
+    // 因子D: 发行方式
+    var methodAdj = 0;
+    if (d.price_way && d.price_way !== '直接定价') {
+      methodAdj = -3000;  // 询价发行，散户参与度低
+    }
+
+    var A = 9000 + priceAdj + peAdj + indAdj + methodAdj;
+
+    return {
+      conservative: Math.round((A - 1500) * 100 / Q),
+      neutral: Math.round(A * 100 / Q),
+      optimistic: Math.round((A + 1500) * 100 / Q)
+    };
+  }
+
   // ============ API 数据转换 ============
   function transformAPIData(rawList) {
     return rawList.map(function(r) {
@@ -26,7 +69,12 @@ var BSE = (function() {
       var cc = null;
       if (np && ip && ip > 0) cc = np / ip - 1;
 
-      return {
+      // 待申购预测用字段
+      var msa = parseFloat(r.APPLY_AMT_UPPER) || null;
+      var oin = parseFloat(r.ONLINE_ISSUE_NUM) || null;
+      var pw = r.PRICE_WAY || null;
+
+      var rec = {
         code: r.SECURITY_CODE,
         name: r.SECURITY_NAME_ABBR,
         apply_date: ad,
@@ -42,8 +90,21 @@ var BSE = (function() {
         annual_return: cp || null,
         fund_yi: parseFloat(r.VA_AMT) ? parseFloat(r.VA_AMT) / 1e8 : null,
         people_wan: parseFloat(r.ORG_VAN) ? parseFloat(r.ORG_VAN) / 1e4 : null,
-        listing_serial: null
+        listing_serial: null,
+        // 待申购预测
+        max_sub_amt: msa ? msa / 10000 : null,
+        online_issue_num: oin ? oin / 10000 : null,
+        price_way: pw
       };
+
+      // 如果没有实际稳获百股数据，用四因子模型预测
+      if (rec.funds_needed == null && rec.price != null && rec.online_issue_num != null) {
+        rec.predicted_funds = predictFundsNeeded(rec);
+      } else {
+        rec.predicted_funds = null;
+      }
+
+      return rec;
     });
   }
 

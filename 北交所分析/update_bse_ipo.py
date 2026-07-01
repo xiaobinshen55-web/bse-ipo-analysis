@@ -174,6 +174,7 @@ def transform(raw_data):
             "行业市盈率": ipe,
             "参与申购资金(亿)": round(va, 2) if va else None,
             "参与申购人数(万)": round(ov, 2) if ov else None,
+            "发行方式": r.get("PRICE_WAY"),
         })
     return pd.DataFrame(rows)
 
@@ -200,6 +201,9 @@ def build_html_embedded_json(df):
             "fund_yi": float(r["参与申购资金(亿)"]) if pd.notna(r.get("参与申购资金(亿)")) else None,
             "people_wan": float(r["参与申购人数(万)"]) if pd.notna(r.get("参与申购人数(万)")) else None,
             "listing_serial": float(r["上市首日(序列)"]) if pd.notna(r.get("上市首日(序列)")) else None,
+            "max_sub_amt": float(r["顶格所需资金(万元)"]) if pd.notna(r.get("顶格所需资金(万元)")) else None,
+            "online_issue_num": float(r["网上发行数量(万股)"]) if pd.notna(r.get("网上发行数量(万股)")) else None,
+            "price_way": str(r.get("发行方式", "")) if pd.notna(r.get("发行方式")) else None,
         })
     return records
 
